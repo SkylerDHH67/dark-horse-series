@@ -487,6 +487,23 @@ button{ font-family: inherit; }
   font-weight: 500;
 }
 
+/* Same credit line, but as a persistent page footer — present on the
+   audience picker and the directory, not just the profile view. */
+.site-credit{
+  text-align: center; padding: 28px 20px 32px;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--data); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-faint); opacity: 0.75;
+}
+.site-credit span{
+  font-family: var(--display);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
 .loading, .error-box{ text-align: center; padding: 80px 20px; color: var(--text-dim); max-width: 480px; margin: 0 auto; }
 .error-box{ font-size: 13.5px; line-height: 1.6; }
 .error-box code{ background: var(--bg-card); padding: 2px 6px; border-radius: 4px; }
