@@ -9,13 +9,13 @@ window.APP_CONFIG = {
   // "Players" Google Sheet, exported live as CSV. Must be shared
   // as "Anyone with the link -> Viewer" or this will fail to load.
   PLAYERS_CSV_URL:
-    "https://docs.google.com/spreadsheets/d/1Kfxr08kv2kvifbMhyFaGxvcraw4J1z8hsXPooX4rmd8/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1Kfxr08kv2kvifbMhyFaGxvcraw4J1z8hsXPooX4rmd8/edit?gid=1075290060#gid=1075290060",
 
   // "Config" Google Sheet — controlled vocabulary for audiences
   // and trait labels. Add a row there to add a new audience or
   // trait; no code change needed.
   CONFIG_CSV_URL:
-    "https://docs.google.com/spreadsheets/d/1HHOv2ge7BRTZ0dsAaiJdxTSzVLxu2MT5zdZ0HYCf2pQ/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1HHOv2ge7BRTZ0dsAaiJdxTSzVLxu2MT5zdZ0HYCf2pQ/edit?gid=48718766#gid=48718766",
 
   SITE_NAME: "THE TEAM",
   SUB_BRAND: "DARK HORSE SERIES",
