@@ -5,8 +5,7 @@
    reserved for system/interaction moments. Mobile-first.
 
    TYPE SYSTEM (3 fonts, each with one job):
-     --display : Datalegreya (data-curve typeface), falls back to Space
-                 Grotesk — brand mark, player names, major headings
+     --display : Outfit         — brand mark, player names, major headings
      --sans    : Inter          — UI, body copy, biometrics, buttons, nav
      --data    : Space Mono     — eyebrows, small labels, metadata, tags
    ========================================================= */
@@ -25,10 +24,7 @@
   --radius: 14px;
   --radius-sm: 8px;
   --maxw: 1180px;
-  /* Several possible registered names are listed because the CDN mirror's
-     exact family naming can't be verified from here — whichever one
-     actually matches wins; if none do, it falls through to Space Grotesk. */
-  --display: "Datalegreya Thin", "Datalegreya-Thin", "Datalegreya", "Space Grotesk", "Helvetica Neue", sans-serif;
+  --display: "Outfit", "Helvetica Neue", sans-serif;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --data: "Space Mono", "SF Mono", "Courier New", monospace;
 
@@ -57,11 +53,6 @@ body{
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   position: relative;
-  /* Required by Datalegreya to render its glyphs correctly; harmless
-     no-op for every other font in the stack. */
-  font-feature-settings: "kern" on, "liga" on, "calt" on;
-  font-variant-ligatures: common-ligatures discretionary-ligatures contextual;
-  text-rendering: optimizeLegibility;
 }
 /* Very subtle layered background depth — static, no JS/parallax cost.
    The faint diagonal hairlines are a near-subliminal texture: restrained
@@ -122,9 +113,8 @@ button{ font-family: inherit; }
 /* Authorship credit — a curator/director-style credit line, not a
    signature. No script, no italics, no decoration: just scale, weight,
    spacing, capitalization, and opacity carrying the "high-class and
-   understated" feeling. The name itself is set in the display face for
-   a touch of the Datalegreya character; the "by" stays in the technical
-   mono for contrast. */
+   understated" feeling. The name is set in the display face (Outfit);
+   the "by" stays in the technical mono for contrast. */
 .brand-byline{
   font-family: var(--data);
   font-size: 10px;
@@ -170,8 +160,7 @@ button{ font-family: inherit; }
 .audience-title{
   font-family: var(--display);
   font-size: 30px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
   margin: 24px 0 8px;
 }
 .audience-sub{ color: var(--text-dim); font-size: 14.5px; margin: 0 0 28px; }
@@ -355,7 +344,7 @@ button{ font-family: inherit; }
 }
 .card-nameplate{ position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 12px 14px 14px; transition: transform .22s ease; }
 .card:hover .card-nameplate{ transform: translateY(-2px); }
-.card-name{ font-family: var(--display); font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+.card-name{ font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.15; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
 .card-meta{ font-size: 12px; color: var(--text-dim); margin-top: 3px; }
 .card-team{ font-size: 11.5px; color: var(--text-faint); margin-top: 2px; }
 .card-traits{ display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
@@ -374,7 +363,7 @@ button{ font-family: inherit; }
 .profile-traits{ margin-top: 0; }
 
 .empty-state{ text-align: center; padding: 80px 20px; color: var(--text-faint); }
-.empty-state-title{ font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--text-dim); margin-bottom: 8px; }
+.empty-state-title{ font-family: var(--display); font-weight: 700; font-size: 20px; color: var(--text-dim); margin-bottom: 8px; }
 
 /* ---------- Profile ---------- */
 .profile-overlay{
@@ -431,7 +420,7 @@ button{ font-family: inherit; }
 }
 
 .profile-stage{ font-family: var(--data); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ice); margin-bottom: 6px; }
-.profile-name{ font-family: var(--display); font-size: 28px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 6px; }
+.profile-name{ font-family: var(--display); font-size: 28px; font-weight: 700; line-height: 1.1; margin-bottom: 6px; }
 .profile-badges{ display: flex; flex-wrap: wrap; gap: 8px; font-size: 12.5px; color: var(--text-dim); }
 .profile-badges span{ border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; }
 .profile-team{ font-size: 13px; color: var(--text-faint); margin-top: 8px; }
