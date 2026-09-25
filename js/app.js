@@ -9,7 +9,6 @@
   const U = window.APP_UTILS;
   const F = window.APP_FILTERS;
   const R = window.APP_RENDER;
-  const LS_AUDIENCE = "dhs_audience";
 
   function $(sel) { return document.querySelector(sel); }
 
@@ -39,13 +38,9 @@
   }
 
   function startAudiencePicker() {
-    const saved = localStorage.getItem(LS_AUDIENCE);
-    const options = F.getAudienceOptions(DATA.audiences);
-    if (saved && options.some((a) => a.key === saved)) {
-      STATE.audience = saved;
-      showDirectory();
-      return;
-    }
+    // Always land on the audience picker for a fresh page load — the
+    // audience choice is intentionally NOT remembered across visits, so
+    // every visitor (or every reload) sees "Who are you?" first.
     showAudienceScreen();
   }
 
@@ -55,7 +50,6 @@
     const options = F.getAudienceOptions(DATA.audiences);
     R.renderAudiencePicker($("#audience-list"), options, (a) => {
       STATE.audience = a.key;
-      localStorage.setItem(LS_AUDIENCE, a.key);
       $("#audience-screen").classList.add("hidden");
       showDirectory();
     });
