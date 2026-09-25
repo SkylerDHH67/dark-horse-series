@@ -1,7 +1,13 @@
 /* =========================================================
    THE TEAM — DARK HORSE SERIES
-   Design system: dark editorial palette, serif display type,
-   restrained gold accent, generous whitespace. Mobile-first.
+   Design system: dark, precise, quietly technical. Black + gold
+   remain the primary identity; ice blue is a controlled accent
+   reserved for system/interaction moments. Mobile-first.
+
+   TYPE SYSTEM (3 fonts, each with one job):
+     --display : Space Grotesk — brand mark, player names, major headings
+     --sans    : Inter          — UI, body copy, biometrics, buttons, nav
+     --data    : Space Mono     — eyebrows, small labels, metadata, tags
    ========================================================= */
 
 :root{
@@ -18,9 +24,17 @@
   --radius: 14px;
   --radius-sm: 8px;
   --maxw: 1180px;
-  --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --display: "Space Grotesk", "Helvetica Neue", sans-serif;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --athletic: "Oswald", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --data: "Space Mono", "SF Mono", "Courier New", monospace;
+
+  /* ICE BLUE — the one accent color. System / technology / interaction /
+     focus. Never a third brand color; gold still signals the player and
+     the Dark Horse identity. Used for focus rings, active system controls,
+     and small technical read-outs only. */
+  --ice: #6ec6de;
+  --ice-bright: #a9e4f0;
+  --ice-dim: rgba(110,198,222,0.30);
 
   /* Subtle, data-driven per-position accent — deliberately restrained,
      not neon. Falls back to gold when a position doesn't match a group. */
@@ -40,7 +54,10 @@ body{
   min-height: 100vh;
   position: relative;
 }
-/* Very subtle layered background depth — static, no JS/parallax cost. */
+/* Very subtle layered background depth — static, no JS/parallax cost.
+   The faint diagonal hairlines are a near-subliminal texture: restrained
+   "engraved" line-work, meant to read as craftsmanship/archive rather
+   than as a visible pattern. */
 body::before{
   content: "";
   position: fixed;
@@ -49,8 +66,9 @@ body::before{
   pointer-events: none;
   background:
     radial-gradient(circle at 12% -8%, rgba(201,169,97,0.09), transparent 42%),
-    radial-gradient(circle at 100% 8%, rgba(143,180,216,0.05), transparent 38%),
-    radial-gradient(circle at 50% 110%, rgba(201,169,97,0.05), transparent 45%);
+    radial-gradient(circle at 100% 8%, rgba(110,198,222,0.06), transparent 38%),
+    radial-gradient(circle at 50% 110%, rgba(201,169,97,0.05), transparent 45%),
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 90px);
 }
 a{ color: inherit; text-decoration: none; }
 button{ font-family: inherit; }
@@ -67,7 +85,9 @@ button{ font-family: inherit; }
   }
 }
 
-:focus-visible{ outline: 2px solid var(--gold-bright); outline-offset: 3px; border-radius: 4px; }
+/* Focus = the interface becoming active. Kept ice-blue, distinct from
+   gold, which stays reserved for the player/brand. */
+:focus-visible{ outline: 2px solid var(--ice-bright); outline-offset: 3px; border-radius: 4px; }
 
 ::-webkit-scrollbar{ width: 10px; height: 10px; }
 ::-webkit-scrollbar-track{ background: transparent; }
@@ -82,23 +102,29 @@ button{ font-family: inherit; }
   margin-bottom: 6px;
 }
 .brand-sub{
-  font-family: var(--athletic);
+  font-family: var(--display);
   font-size: 16px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   color: var(--gold);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
+/* Authorship credit — a curator/director-style credit line, not a
+   signature. No script, no italics, no decoration: just scale, weight,
+   spacing, capitalization, and opacity carrying the "high-class and
+   understated" feeling. */
 .brand-byline{
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 12px;
+  font-family: var(--data);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--text-faint);
-  margin-top: 8px;
-  letter-spacing: 0.01em;
+  opacity: 0.8;
+  margin-top: 10px;
 }
-.brand-byline span{ color: var(--gold-bright); font-weight: 500; font-style: normal; }
+.brand-byline span{ color: var(--text-dim); font-weight: 500; }
 
 .brand-home{
   display: flex;
@@ -124,9 +150,10 @@ button{ font-family: inherit; }
 .audience-card{ width: 100%; max-width: 640px; }
 .audience-head{ text-align: center; margin-bottom: 20px; }
 .audience-title{
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 30px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   margin: 24px 0 8px;
 }
 .audience-sub{ color: var(--text-dim); font-size: 14.5px; margin: 0 0 28px; }
@@ -142,13 +169,14 @@ button{ font-family: inherit; }
   border-radius: var(--radius);
   background: var(--bg-card);
   cursor: pointer;
-  transition: border-color .15s ease, background .15s ease;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease, box-shadow .2s ease;
+  box-shadow: inset 3px 0 0 0 transparent;
 }
-.audience-option{ transition: border-color .15s ease, background .15s ease, transform .15s ease; }
-.audience-option:hover{ border-color: var(--gold); background: var(--bg-elevated); }
+.audience-option:hover{ border-color: var(--gold); background: var(--bg-elevated); box-shadow: inset 3px 0 0 0 var(--gold); }
 .audience-option:active{ transform: scale(0.985); }
 .audience-option-label{ font-size: 15.5px; font-weight: 600; }
-.audience-option-arrow{ color: var(--gold); font-size: 18px; flex-shrink: 0; }
+.audience-option-arrow{ color: var(--gold); font-size: 18px; flex-shrink: 0; transition: transform .2s ease; }
+.audience-option:hover .audience-option-arrow{ transform: translateX(3px); }
 
 /* ---------- App shell ---------- */
 .app{ min-height: 100vh; }
@@ -171,8 +199,8 @@ button{ font-family: inherit; }
   border: 1px solid var(--line); border-radius: 999px;
   padding: 6px 12px; cursor: pointer; background: var(--bg-card);
   white-space: nowrap;
+  transition: border-color .15s ease, transform .12s ease;
 }
-.audience-pill{ transition: border-color .15s ease, transform .12s ease; }
 .audience-pill:hover{ border-color: var(--gold); }
 .audience-pill:active{ transform: scale(0.96); }
 .audience-pill b{ color: var(--text); font-weight: 600; }
@@ -183,14 +211,16 @@ button{ font-family: inherit; }
   border: 1px solid var(--line); background: var(--bg-elevated);
   color: var(--text); font-size: 14.5px;
 }
-.search-input:focus{ outline: none; border-color: var(--gold); }
+.search-input:focus{ outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px var(--ice-dim); }
 .filter-toggle{
   padding: 12px 16px; border-radius: var(--radius-sm);
   border: 1px solid var(--line); background: var(--bg-elevated);
   color: var(--text-dim); font-size: 13.5px; cursor: pointer; white-space: nowrap;
+  transition: border-color .15s ease, color .15s ease, transform .12s ease, box-shadow .15s ease;
 }
-.filter-toggle{ transition: border-color .15s ease, color .15s ease, transform .12s ease; }
-.filter-toggle.active{ border-color: var(--gold); color: var(--gold-bright); }
+/* Filters are a system/technical action — ice, not gold — distinct from
+   the stage tabs below, which stay gold since they choose players. */
+.filter-toggle.active{ border-color: var(--ice); color: var(--ice-bright); box-shadow: 0 0 0 3px var(--ice-dim); }
 .filter-toggle:active{ transform: scale(0.96); }
 
 .filters-panel{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
@@ -214,7 +244,8 @@ button{ font-family: inherit; }
 }
 .tab.active{ background: var(--gold); border-color: var(--gold); color: #16130a; font-weight: 600; }
 .tab:active{ transform: scale(0.95); }
-.tab-count{ opacity: 0.65; margin-left: 4px; font-size: 11.5px; }
+.tab-count{ font-family: var(--data); color: var(--ice); opacity: 0.85; margin-left: 4px; font-size: 11px; }
+.tab.active .tab-count{ color: #16130a; opacity: 0.6; }
 
 .main{ max-width: var(--maxw); margin: 0 auto; padding: 4px 20px 80px; }
 .result-meta{ font-size: 12.5px; color: var(--text-faint); margin: 4px 0 16px; }
@@ -256,7 +287,9 @@ button{ font-family: inherit; }
 .card:hover{
   transform: translateY(-6px);
   border-color: var(--gold);
-  box-shadow: 0 18px 36px -14px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,169,97,0.15);
+  /* Gold responds (elevation + border) while a thin ice ring signals the
+     system "focusing" on this card — the two accents doing distinct jobs. */
+  box-shadow: 0 18px 36px -14px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,169,97,0.15), inset 0 0 0 1px var(--ice-dim);
 }
 .card:active{ transform: translateY(-2px) scale(0.99); }
 
@@ -271,19 +304,28 @@ button{ font-family: inherit; }
 .card:hover .card-photo img{ transform: scale(1.08); }
 .card-photo-fallback{
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: var(--serif); font-size: 48px; color: rgba(255,255,255,0.12);
+  font-family: var(--display); font-weight: 600; font-size: 44px; color: rgba(255,255,255,0.12);
 }
 .card-inner::before{
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(5,5,6,0.96) 0%, rgba(5,5,6,0.55) 34%, transparent 60%);
   pointer-events: none; z-index: 2;
 }
+/* A restrained diagonal light sweep on hover — "the system focusing on
+   this player" / light briefly revealing information from darkness. */
+.card-inner::after{
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(115deg, transparent 42%, rgba(169,228,240,0.14) 50%, transparent 58%);
+  transform: translateX(-130%);
+  transition: transform .7s cubic-bezier(.16,.84,.44,1);
+}
+.card:hover .card-inner::after{ transform: translateX(130%); }
 .card-badge{
   position: absolute; top: 13px; right: 10px; z-index: 3;
   max-width: 46%;
-  font-family: var(--athletic); font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+  font-family: var(--data); font-size: 10.5px; font-weight: 500; letter-spacing: 0.02em;
   color: var(--text); background: rgba(11,11,12,0.78);
-  border: 1px solid rgba(255,255,255,0.2); border-radius: 999px;
+  border: 1px solid var(--ice-dim); border-radius: 999px;
   padding: 5px 11px; white-space: nowrap; text-transform: uppercase;
   overflow: hidden; text-overflow: ellipsis;
 }
@@ -297,7 +339,7 @@ button{ font-family: inherit; }
 }
 .card-nameplate{ position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 12px 14px 14px; transition: transform .22s ease; }
 .card:hover .card-nameplate{ transform: translateY(-2px); }
-.card-name{ font-family: var(--serif); font-size: 18px; font-weight: 600; line-height: 1.15; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+.card-name{ font-family: var(--display); font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
 .card-meta{ font-size: 12px; color: var(--text-dim); margin-top: 3px; }
 .card-team{ font-size: 11.5px; color: var(--text-faint); margin-top: 2px; }
 .card-traits{ display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
@@ -309,14 +351,14 @@ button{ font-family: inherit; }
   border-radius: 999px; padding: 3px 8px 3px 4px;
 }
 .trait-mono{
-  font-size: 9px; font-weight: 700; color: #16130a;
+  font-family: var(--data); font-size: 9px; font-weight: 700; color: #16130a;
   background: var(--gold-bright); border-radius: 999px;
   width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center;
 }
 .profile-traits{ margin-top: 0; }
 
 .empty-state{ text-align: center; padding: 80px 20px; color: var(--text-faint); }
-.empty-state-title{ font-family: var(--serif); font-size: 20px; color: var(--text-dim); margin-bottom: 8px; }
+.empty-state-title{ font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--text-dim); margin-bottom: 8px; }
 
 /* ---------- Profile ---------- */
 .profile-overlay{
@@ -325,6 +367,19 @@ button{ font-family: inherit; }
   transition: opacity .26s ease, transform .26s cubic-bezier(.16,.84,.44,1);
 }
 .profile-overlay.is-open{ opacity: 1; transform: translateY(0); }
+/* A brief one-shot light line at the very top on open — a quiet "impact
+   frame" that reads as a scan/reveal rather than a decoration. */
+.profile-overlay::before{
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 10;
+  background: linear-gradient(90deg, transparent, var(--ice-bright), var(--gold-bright), transparent);
+  opacity: 0; pointer-events: none;
+}
+.profile-overlay.is-open::before{ animation: reveal-sweep .7s ease-out forwards; }
+@keyframes reveal-sweep{
+  0%{ opacity: 0; transform: scaleX(0.25); }
+  35%{ opacity: 1; transform: scaleX(1); }
+  100%{ opacity: 0; transform: scaleX(1); }
+}
 .profile-close-bar{
   position: sticky; top: 0; z-index: 5; background: rgba(11,11,12,0.92);
   backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft);
@@ -341,28 +396,45 @@ button{ font-family: inherit; }
   object-fit: cover; background: linear-gradient(160deg, #1c1c1f, #0f0f11);
   border: 1px solid var(--line-soft); flex-shrink: 0;
 }
-.profile-photo-fallback{ display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 36px; color: var(--line); }
-.profile-stage{ font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 6px; }
-.profile-name{ font-family: var(--serif); font-size: 28px; font-weight: 500; line-height: 1.1; margin-bottom: 6px; }
+.profile-photo-fallback{ display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 600; font-size: 34px; color: var(--line); }
+
+/* Staggered "surfacing" reveal on the hero block — information arriving
+   in sequence rather than all at once. Purely CSS, respects reduced motion
+   via the global rule above. */
+.profile-stage, .profile-name, .profile-badges, .profile-team, .profile-quote{
+  animation: reveal-up .5s cubic-bezier(.16,.84,.44,1) both;
+}
+.profile-stage{ animation-delay: .04s; }
+.profile-name{ animation-delay: .09s; }
+.profile-badges{ animation-delay: .15s; }
+.profile-team{ animation-delay: .19s; }
+.profile-quote{ animation-delay: .24s; }
+@keyframes reveal-up{
+  from{ opacity: 0; transform: translateY(8px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.profile-stage{ font-family: var(--data); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ice); margin-bottom: 6px; }
+.profile-name{ font-family: var(--display); font-size: 28px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 6px; }
 .profile-badges{ display: flex; flex-wrap: wrap; gap: 8px; font-size: 12.5px; color: var(--text-dim); }
 .profile-badges span{ border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; }
 .profile-team{ font-size: 13px; color: var(--text-faint); margin-top: 8px; }
 
 .profile-quote{
-  font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--gold-bright);
+  font-family: var(--display); font-weight: 500; font-size: 18px; color: var(--gold-bright);
   margin: 24px 0 14px; padding-left: 16px; border-left: 2px solid var(--gold);
 }
 .profile-summary{ margin-bottom: 26px; }
 
 .section{ margin-bottom: 28px; }
 .section-title{
-  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
+  font-family: var(--data); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
   margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-soft);
 }
 .section-text{ font-size: 15px; line-height: 1.65; color: var(--text-dim); }
 .kv-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
 .kv{ min-width: 0; }
-.kv-label{ font-size: 11px; color: var(--text-faint); margin-bottom: 3px; }
+.kv-label{ font-family: var(--data); font-size: 10px; letter-spacing: 0.04em; color: var(--text-faint); margin-bottom: 3px; }
 .kv-value{ font-size: 14.5px; color: var(--text); }
 
 .report-block{ margin-bottom: 16px; }
@@ -380,11 +452,14 @@ button{ font-family: inherit; }
   display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px;
   border: 1px solid var(--gold); border-radius: 999px; color: var(--gold-bright);
   font-size: 13.5px; font-weight: 600;
+  transition: background .15s ease, transform .12s ease, border-color .15s ease;
 }
-.film-btn{ transition: background .15s ease, transform .12s ease; }
 .film-btn:hover{ background: rgba(201,169,97,0.1); }
 .film-btn:active{ transform: scale(0.97); }
 .film-btn-secondary{ border-color: var(--line); color: var(--text-dim); }
+.film-btn-secondary:hover{ background: var(--ice-dim); border-color: var(--ice); color: var(--ice-bright); }
+.film-ico{ display: inline-block; transition: transform .18s ease; }
+.film-btn:hover .film-ico{ transform: translateX(2px); }
 
 .contact-box{
   background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius);
@@ -395,15 +470,16 @@ button{ font-family: inherit; }
 .profile-credit{
   text-align: center; margin-top: 44px; padding-top: 20px;
   border-top: 1px solid var(--line-soft);
-  font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--text-faint);
+  font-family: var(--data); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-faint); opacity: 0.75;
 }
-.profile-credit span{ color: var(--gold-bright); font-weight: 500; font-style: normal; }
+.profile-credit span{ color: var(--text-dim); font-weight: 500; }
 
 .loading, .error-box{ text-align: center; padding: 80px 20px; color: var(--text-dim); max-width: 480px; margin: 0 auto; }
 .error-box{ font-size: 13.5px; line-height: 1.6; }
 .error-box code{ background: var(--bg-card); padding: 2px 6px; border-radius: 4px; }
 .spinner{
-  width: 26px; height: 26px; border: 2px solid var(--line); border-top-color: var(--gold);
+  width: 26px; height: 26px; border: 2px solid var(--line); border-top-color: var(--ice);
   border-radius: 50%; margin: 0 auto 16px; animation: spin 0.8s linear infinite;
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }

@@ -213,8 +213,8 @@
 
   function filmSection(p) {
     const btns = [];
-    if (!U.isBlank(p.highlight_url)) btns.push('<a class="film-btn" href="' + U.esc(p.highlight_url) + '" target="_blank" rel="noopener">▶ Highlights</a>');
-    if (!U.isBlank(p.full_game_url)) btns.push('<a class="film-btn" href="' + U.esc(p.full_game_url) + '" target="_blank" rel="noopener">▶ Full Game</a>');
+    if (!U.isBlank(p.highlight_url)) btns.push('<a class="film-btn" href="' + U.esc(p.highlight_url) + '" target="_blank" rel="noopener"><span class="film-ico">▶</span> Highlights</a>');
+    if (!U.isBlank(p.full_game_url)) btns.push('<a class="film-btn" href="' + U.esc(p.full_game_url) + '" target="_blank" rel="noopener"><span class="film-ico">▶</span> Full Game</a>');
     if (!U.isBlank(p.stats_url)) btns.push('<a class="film-btn film-btn-secondary" href="' + U.esc(p.stats_url) + '" target="_blank" rel="noopener">Stats</a>');
     return btns.length ? sectionWrap("Film", '<div class="film-row">' + btns.join("") + "</div>") : "";
   }
@@ -260,9 +260,6 @@
         "</div>" +
         (!U.isBlank(p.scouting_snapshot) ? '<div class="profile-quote">' + U.esc(p.scouting_snapshot) + "</div>" : "") +
         (!U.isBlank(p.scouting_summary) ? '<div class="section-text profile-summary">' + U.esc(p.scouting_summary) + "</div>" : "") +
-        // Film is moved up, right after the "who/what/why" intro — a scout
-        // or exec should reach video in one glance, not after scrolling
-        // past the full written report.
         filmSection(p) +
         overviewSection(p) +
         traitsSection(p, traitLabels) +
@@ -277,8 +274,6 @@
     container.classList.remove("hidden");
     document.body.style.overflow = "hidden";
     window.scrollTo(0, 0);
-    // Let the "hidden" removal paint first, then trigger the open
-    // transition on the next frame (see .profile-overlay.is-open in CSS).
     window.requestAnimationFrame(() => container.classList.add("is-open"));
     $("#profile-back-btn", container).addEventListener("click", onBack);
   }
