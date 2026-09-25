@@ -488,20 +488,21 @@ button{ font-family: inherit; }
 }
 
 /* Same credit line, but as a persistent page footer — present on the
-   audience picker and the directory, not just the profile view. */
+   audience picker and the directory, not just the profile view.
+   Deliberately quiet: small, grey, uniform mono type, no divider line —
+   present for anyone who looks, invisible to anyone who doesn't. */
 .site-credit{
-  text-align: center; padding: 28px 20px 32px;
-  border-top: 1px solid var(--line-soft);
-  font-family: var(--data); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--text-faint); opacity: 0.75;
+  text-align: center; padding: 22px 20px 26px;
+  font-family: var(--data); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-faint); opacity: 0.4;
 }
 .site-credit span{
-  font-family: var(--display);
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-  text-transform: none;
-  color: var(--text-dim);
-  font-weight: 500;
+  font-family: var(--data);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: 400;
 }
 
 .loading, .error-box{ text-align: center; padding: 80px 20px; color: var(--text-dim); max-width: 480px; margin: 0 auto; }
