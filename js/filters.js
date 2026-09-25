@@ -39,11 +39,20 @@
     return set;
   }
 
+  // "All" is a UI sentinel meaning "no stage restriction" — it is never a
+  // real value of player_stage, so it must never be compared against it.
+  const ALL_STAGES_KEY = "All";
+
+  function matchesStage(player, stageKey) {
+    if (!stageKey || stageKey === ALL_STAGES_KEY) return true;
+    return player.player_stage === stageKey;
+  }
+
   function applyFilters(players, state) {
     return players.filter((p) => {
       if (!matchesAudience(p, state.audience)) return false;
       if (state.position && p.position !== state.position) return false;
-      if (state.stage && p.player_stage !== state.stage) return false;
+      if (!matchesStage(p, state.stage)) return false;
       if (!matchesSearch(p, state.query)) return false;
       return true;
     });
@@ -58,7 +67,7 @@
   }
 
   window.APP_FILTERS = {
-    INTERNAL_AUDIENCE_KEY, getAudienceOptions, matchesAudience, matchesSearch,
-    uniqueValues, applyFilters, sortPlayers,
+    INTERNAL_AUDIENCE_KEY, ALL_STAGES_KEY, getAudienceOptions, matchesAudience, matchesSearch,
+    matchesStage, uniqueValues, applyFilters, sortPlayers,
   };
 })();

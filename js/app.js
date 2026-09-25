@@ -92,6 +92,13 @@
     $("#audience-pill").addEventListener("click", () => {
       showAudienceScreen();
     });
+
+    const brandHomeBtn = $("#brand-home-btn");
+    if (brandHomeBtn) {
+      brandHomeBtn.addEventListener("click", () => {
+        showAudienceScreen();
+      });
+    }
   }
 
   function renderAll() {
@@ -109,8 +116,10 @@
       renderAll();
     });
 
-    const stageFiltered = STATE.stage === "All" ? audienceScoped : audienceScoped.filter((p) => p.player_stage === STATE.stage);
-    const filtered = F.applyFilters(stageFiltered, STATE);
+    // Stage is applied once, inside applyFilters, which treats the "All"
+    // sentinel as "no restriction" — do not filter by stage a second time
+    // here (that duplicate pass was the root cause of the "All" bug).
+    const filtered = F.applyFilters(audienceScoped, STATE);
     const sorted = F.sortPlayers(filtered);
 
     $("#result-meta").textContent = sorted.length + (sorted.length === 1 ? " player" : " players");
@@ -122,9 +131,15 @@
   }
 
   function closeProfile() {
-    $("#profile-overlay").classList.add("hidden");
-    $("#profile-overlay").innerHTML = "";
+    const overlay = $("#profile-overlay");
+    overlay.classList.remove("is-open");
     document.body.style.overflow = "";
+    // Give the CSS close transition a moment to run before wiping content —
+    // falls back instantly if the browser has reduced motion / no transition.
+    window.setTimeout(() => {
+      overlay.classList.add("hidden");
+      overlay.innerHTML = "";
+    }, 260);
   }
 
   document.addEventListener("DOMContentLoaded", boot);

@@ -32,6 +32,17 @@
     return '<span class="trait-chip"><span class="trait-mono">' + U.esc(U.monogram(key)) + '</span>' + U.esc(label) + "</span>";
   }
 
+  // Buckets a free-text position into a broad group so the card can carry a
+  // small, consistent, data-driven accent color — never a random/inconsistent one.
+  function positionGroup(pos) {
+    if (U.isBlank(pos)) return "";
+    const p = String(pos).toLowerCase();
+    if (p.indexOf("guard") !== -1) return "guard";
+    if (p.indexOf("wing") !== -1 || p.indexOf("forward") !== -1) return "wing";
+    if (p.indexOf("big") !== -1 || p.indexOf("center") !== -1 || p.indexOf("five") !== -1) return "big";
+    return "";
+  }
+
   // ---------------------------------------------------------
   // Audience picker ("Who are you?")
   // ---------------------------------------------------------
@@ -88,13 +99,15 @@
   // ---------------------------------------------------------
   // Card grid
   // ---------------------------------------------------------
-  function renderCard(p, traitLabels, onClick) {
-    const card = el("div", "card");
+  function renderCard(p, traitLabels, onClick, index) {
+    const group = positionGroup(p.position);
+    const card = el("div", "card" + (group ? " card--" + group : ""));
     const teamLine = [p.current_team, p.current_league].filter((v) => !U.isBlank(v)).join(" · ");
     const metaParts = [p.height, cardYear(p)].filter((v) => !U.isBlank(v));
-    const posAbbrev = U.abbreviatePosition(p.position);
-    const traits = p._keyTraits.slice(0, 4);
+    const traits = p._keyTraits.slice(0, 3);
 
+    // Full position text, never abbreviated — abbreviating "Wing" to "WIN"
+    // read as a clipped/garbled word rather than a real position.
     const photoHTML = !U.isBlank(p.photo_url)
       ? '<img src="' + U.esc(p.photo_url) + '" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=&quot;card-photo-fallback&quot;>' + U.esc(initials(p.display_name)) + '</div>\'">'
       : '<div class="card-photo-fallback">' + U.esc(initials(p.display_name)) + "</div>";
@@ -102,7 +115,7 @@
     card.innerHTML =
       '<div class="card-inner">' +
         '<div class="card-photo">' + photoHTML + "</div>" +
-        (posAbbrev ? '<div class="card-badge">' + U.esc(posAbbrev) + "</div>" : "") +
+        (!U.isBlank(p.position) ? '<div class="card-badge">' + U.esc(p.position) + "</div>" : "") +
         (!U.isBlank(p.dark_horse_category) ? '<div class="card-ribbon"><span>' + U.esc(p.dark_horse_category) + "</span></div>" : "") +
         '<div class="card-nameplate">' +
           '<div class="card-name">' + U.esc(p.display_name) + "</div>" +
@@ -111,6 +124,19 @@
           (traits.length ? '<div class="card-traits">' + traits.map((t) => traitChip(t, traitLabels)).join("") + "</div>" : "") +
         "</div>" +
       "</div>";
+
+    // Stagger the entrance very slightly for the first row or two only —
+    // capped so a long list never feels like it's making you wait.
+    card.style.animationDelay = (Math.min(index || 0, 9) * 35) + "ms";
+
+    const imgEl = card.querySelector(".card-photo img");
+    if (imgEl) {
+      if (imgEl.complete && imgEl.naturalWidth > 0) {
+        imgEl.classList.add("is-loaded");
+      } else {
+        imgEl.addEventListener("load", () => imgEl.classList.add("is-loaded"), { once: true });
+      }
+    }
 
     card.addEventListener("click", () => onClick(p));
     return card;
@@ -124,7 +150,7 @@
       container.appendChild(empty);
       return;
     }
-    players.forEach((p) => container.appendChild(renderCard(p, traitLabels, onCardClick)));
+    players.forEach((p, i) => container.appendChild(renderCard(p, traitLabels, onCardClick, i)));
   }
 
   // ---------------------------------------------------------
@@ -234,19 +260,26 @@
         "</div>" +
         (!U.isBlank(p.scouting_snapshot) ? '<div class="profile-quote">' + U.esc(p.scouting_snapshot) + "</div>" : "") +
         (!U.isBlank(p.scouting_summary) ? '<div class="section-text profile-summary">' + U.esc(p.scouting_summary) + "</div>" : "") +
+        // Film is moved up, right after the "who/what/why" intro — a scout
+        // or exec should reach video in one glance, not after scrolling
+        // past the full written report.
+        filmSection(p) +
         overviewSection(p) +
         traitsSection(p, traitLabels) +
         scoutingReportSection(p) +
         comparisonsSection(p) +
-        filmSection(p) +
         careerSection(p) +
         marketFitSection(p) +
         contactSection(p) +
+        '<div class="profile-credit">Curated by <span>Skyler Beauchamp</span> — The Team</div>' +
       "</div>";
 
     container.classList.remove("hidden");
     document.body.style.overflow = "hidden";
     window.scrollTo(0, 0);
+    // Let the "hidden" removal paint first, then trigger the open
+    // transition on the next frame (see .profile-overlay.is-open in CSS).
+    window.requestAnimationFrame(() => container.classList.add("is-open"));
     $("#profile-back-btn", container).addEventListener("click", onBack);
   }
 
