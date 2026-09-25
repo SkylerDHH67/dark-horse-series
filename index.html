@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>THE TEAM — Dark Horse Series</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ======= AUDIENCE PICKER ("Who are you?") ======= -->
+  <section id="audience-screen" class="audience-screen hidden">
+    <div class="audience-card">
+      <div class="audience-head">
+        <div class="brand-stack">
+          <div class="brand-parent">THE TEAM</div>
+          <div class="brand-sub">DARK HORSE SERIES</div>
+        </div>
+        <h1 class="audience-title">Who are you?</h1>
+        <p class="audience-sub">This determines which players you'll see. Change it anytime from the header.</p>
+      </div>
+      <div id="audience-list" class="audience-list"></div>
+    </div>
+  </section>
+
+  <!-- ======= APP ======= -->
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="topbar-row1">
+          <div class="brand-stack" style="text-align:left">
+            <div class="brand-parent">THE TEAM</div>
+            <div class="brand-sub">DARK HORSE SERIES</div>
+          </div>
+          <div id="audience-pill" class="audience-pill"></div>
+        </div>
+        <div class="searchbar">
+          <input id="search-input" class="search-input" type="text" placeholder="Search by name, team, nationality, position…">
+          <button id="filter-toggle" class="filter-toggle">Filters</button>
+        </div>
+        <div id="filters-panel" class="filters-panel hidden"></div>
+      </div>
+      <nav id="tabs" class="tabs"></nav>
+    </header>
+
+    <main class="main">
+      <div id="result-meta" class="result-meta"></div>
+      <div id="grid" class="grid"></div>
+    </main>
+  </div>
+
+  <!-- ======= LOADING / ERROR ======= -->
+  <div id="loading-screen" class="loading">
+    <div class="spinner"></div>
+    Loading players…
+  </div>
+  <div id="error-screen" class="error-box hidden"></div>
+
+  <!-- ======= PROFILE OVERLAY ======= -->
+  <div id="profile-overlay" class="profile-overlay hidden"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
