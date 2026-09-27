@@ -36,6 +36,7 @@
   const TRAIT_ICON_MAP = {
     shooting: "images/players/shootingskill.jpeg",
     passing: "images/players/passingskill.jpeg",
+    finishing: "images/players/finskill.jpeg",
     "shot creation": "images/players/shotcreationskill.jpeg",
     "decision making": "images/players/decisionmakingskill.jpeg",
     "poa defense": "images/players/poadefenseskill.jpeg",
