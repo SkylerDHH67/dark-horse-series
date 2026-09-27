@@ -50,11 +50,23 @@
     potential: "images/players/potskill.jpeg",
   };
 
-  function traitChip(key, traitLabels) {
+  // A per-player trait_1..trait_4 cell only counts as an icon once it's an
+  // actual image URL — while those cells still hold plain descriptive text
+  // (the pre-migration state), this quietly falls through to the shared
+  // TRAIT_ICON_MAP below instead of rendering a broken image.
+  function looksLikeImageUrl(v) {
+    return !U.isBlank(v) && /^https?:\/\//i.test(String(v).trim());
+  }
+
+  // key: the trait name (from key_strengths). perPlayerIconUrl: that same
+  // trait's own icon URL from the player's row (trait_1..trait_4), when the
+  // player has one — takes priority over the shared TRAIT_ICON_MAP so each
+  // player can eventually carry their own icon per strength.
+  function traitChip(key, traitLabels, perPlayerIconUrl) {
     const label = traitLabels[key] || key.replace(/_/g, " ");
-    const iconSrc = TRAIT_ICON_MAP[key];
+    const iconSrc = looksLikeImageUrl(perPlayerIconUrl) ? perPlayerIconUrl : TRAIT_ICON_MAP[key];
     const badge = iconSrc
-      ? '<img class="trait-icon" src="' + iconSrc + '" alt="" loading="lazy">'
+      ? '<img class="trait-icon" src="' + U.esc(iconSrc) + '" alt="" loading="lazy">'
       : '<span class="trait-mono">' + U.esc(U.monogram(key)) + "</span>";
     return '<span class="trait-chip">' + badge + U.esc(label) + "</span>";
   }
@@ -148,7 +160,7 @@
           '<div class="card-name">' + U.esc(p.display_name) + "</div>" +
           (metaParts.length ? '<div class="card-meta">' + U.esc(metaParts.join(" · ")) + "</div>" : "") +
           (teamLine ? '<div class="card-team">' + U.esc(teamLine) + "</div>" : "") +
-          (traits.length ? '<div class="card-traits">' + traits.map((t) => traitChip(t, traitLabels)).join("") + "</div>" : "") +
+          (traits.length ? '<div class="card-traits">' + traits.map((t, i) => traitChip(t, traitLabels, p["trait_" + (i + 1)])).join("") + "</div>" : "") +
         "</div>" +
       "</div>";
 
@@ -216,7 +228,7 @@
 
   function traitsSection(p, traitLabels) {
     if (!p._keyTraits.length) return "";
-    return sectionWrap("Key Traits", '<div class="card-traits profile-traits">' + p._keyTraits.map((t) => traitChip(t, traitLabels)).join("") + "</div>");
+    return sectionWrap("Key Traits", '<div class="card-traits profile-traits">' + p._keyTraits.map((t, i) => traitChip(t, traitLabels, p["trait_" + (i + 1)])).join("") + "</div>");
   }
 
   function scoutingReportSection(p) {

@@ -25,7 +25,9 @@
   function normalizePlayer(raw) {
     const p = Object.assign({}, raw);
     p._audiences = U.splitList(raw.audiences);
-    p._keyTraits = U.splitList(raw.key_traits);
+    // "key_strengths" is the renamed key_traits column — kept backward
+    // compatible with the old header name just in case.
+    p._keyTraits = U.splitList(raw.key_strengths || raw.key_traits);
     p._featured = U.truthy(raw.featured);
     const order = parseFloat(raw.display_order);
     p._displayOrder = isNaN(order) ? Infinity : order;
