@@ -299,7 +299,12 @@ button{ font-family: inherit; }
 .card:active{ transform: translateY(-2px) scale(0.99); }
 
 .card-inner{ position: relative; height: 100%; width: 100%; }
-.card-photo{ position: absolute; inset: 0; background: linear-gradient(160deg, #1c1c1f, #0f0f11); overflow: hidden; }
+.card-photo{
+  position: absolute; inset: 0; background: linear-gradient(160deg, #1c1c1f, #0f0f11); overflow: hidden;
+  /* A restrained single-corner cut — a technical/dossier edge rather than a
+     plain rectangle, echoing the clipped-frame look from the reference site. */
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
 .card-photo img{
   width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; display: block;
   opacity: 0; transform: scale(1.04);
@@ -366,48 +371,94 @@ button{ font-family: inherit; }
 /* Skill icon badge — replaces the letter-monogram chip wherever a trait
    has a matching icon image. */
 .trait-icon{
-  width: 100%; height: 100%; border-radius: 8px; object-fit: cover;
+  width: 100%; height: 100%; border-radius: 8px; object-fit: contain;
 }
 .profile-traits{ margin-top: 0; }
+/* Bigger, more prominent icons in the expanded profile — skills read as the
+   first real content block there, not an afterthought. */
+.profile-traits .trait-chip{ width: 84px; height: 84px; padding: 10px; }
+
+/* Small uppercase "kicker" label (archetype) above a name — a quick-read
+   descriptor line, same idea as a spec-sheet header. */
+.card-kicker{
+  font-family: var(--data); font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gold-bright); opacity: 0.9; margin-bottom: 3px;
+}
+.profile-kicker{
+  font-family: var(--data); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gold-bright); opacity: 0.9; margin-bottom: 4px;
+}
 
 .empty-state{ text-align: center; padding: 80px 20px; color: var(--text-faint); }
 .empty-state-title{ font-family: var(--display); font-weight: 700; font-size: 20px; color: var(--text-dim); margin-bottom: 8px; }
 
 /* ---------- Profile ---------- */
+/* Now a centered modal/dossier rather than a full-page takeover — a dimmed,
+   blurred backdrop with a single floating card, closer to how the expanded
+   view behaves on the reference site. */
 .profile-overlay{
-  position: fixed; inset: 0; z-index: 50; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity .26s ease, transform .26s cubic-bezier(.16,.84,.44,1);
+  position: fixed; inset: 0; z-index: 50; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: rgba(5,5,6,0.86); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 48px 16px;
+  opacity: 0;
+  transition: opacity .22s ease;
 }
-.profile-overlay.is-open{ opacity: 1; transform: translateY(0); }
-/* A brief one-shot light line at the very top on open — a quiet "impact
-   frame" that reads as a scan/reveal rather than a decoration. */
-.profile-overlay::before{
+.profile-overlay.is-open{ opacity: 1; }
+
+.profile-wrap{
+  position: relative; max-width: 760px; width: 100%; margin: 0 auto;
+  background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 20px;
+  padding: 56px 24px 40px;
+  box-shadow: 0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.02);
+  transform: translateY(18px) scale(0.97);
+  transition: transform .32s cubic-bezier(.16,.84,.44,1);
+}
+.profile-overlay.is-open .profile-wrap{ transform: translateY(0) scale(1); }
+
+/* A brief one-shot light line tracing the card's own top edge on open — a
+   quiet "impact frame" that reads as a scan/reveal rather than a decoration. */
+.profile-wrap::before{
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 10;
+  border-radius: 20px 20px 0 0;
   background: linear-gradient(90deg, transparent, var(--ice-bright), var(--gold-bright), transparent);
   opacity: 0; pointer-events: none;
 }
-.profile-overlay.is-open::before{ animation: reveal-sweep .7s ease-out forwards; }
+.profile-overlay.is-open .profile-wrap::before{ animation: reveal-sweep .7s ease-out forwards; }
 @keyframes reveal-sweep{
   0%{ opacity: 0; transform: scaleX(0.25); }
   35%{ opacity: 1; transform: scaleX(1); }
   100%{ opacity: 0; transform: scaleX(1); }
 }
-.profile-close-bar{
-  position: sticky; top: 0; z-index: 5; background: rgba(11,11,12,0.92);
-  backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft);
-  padding: 14px 20px;
+
+.profile-back{
+  position: absolute; top: 18px; left: 18px; z-index: 5;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; color: var(--text-dim); cursor: pointer;
+  border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px;
+  background: var(--bg-elevated);
+  transition: color .15s ease, border-color .15s ease, transform .15s ease;
 }
-.profile-back{ display: flex; align-items: center; gap: 8px; color: var(--text-dim); font-size: 13.5px; cursor: pointer; transition: color .15s ease, transform .15s ease; }
-.profile-back:hover{ color: var(--gold-bright); transform: translateX(-2px); }
-.profile-back:active{ transform: translateX(-2px) scale(0.97); }
-.profile-wrap{ max-width: 760px; margin: 0 auto; padding: 28px 20px 100px; }
+.profile-back:hover{ color: var(--gold-bright); border-color: var(--gold); }
+.profile-back:active{ transform: scale(0.96); }
+
+.profile-close-x{
+  position: absolute; top: 18px; right: 18px; z-index: 5;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); background: var(--bg-elevated);
+  color: var(--text-dim); font-size: 17px; line-height: 1; cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, transform .15s ease;
+}
+.profile-close-x:hover{ color: var(--ice-bright); border-color: var(--ice); }
+.profile-close-x:active{ transform: scale(0.92); }
 
 .profile-hero{ display: flex; gap: 22px; align-items: flex-start; margin-bottom: 8px; }
 .profile-photo, .profile-photo-fallback{
   width: 130px; height: 180px; border-radius: var(--radius-sm);
   object-fit: cover; object-position: 50% 0%; background: linear-gradient(160deg, #1c1c1f, #0f0f11);
   border: 1px solid var(--line-soft); flex-shrink: 0;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
 }
 .profile-photo-fallback{ display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 600; font-size: 34px; color: var(--line); }
 
@@ -530,4 +581,6 @@ button{ font-family: inherit; }
   .audience-title{ font-size: 26px; }
   .profile-name{ font-size: 24px; }
   .profile-photo, .profile-photo-fallback{ width: 104px; height: 144px; }
+  .profile-overlay{ padding: 20px 8px; }
+  .profile-wrap{ padding: 52px 16px 32px; border-radius: 16px; }
 }

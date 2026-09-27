@@ -160,6 +160,7 @@
         (!U.isBlank(p.position) ? '<div class="card-badge">' + U.esc(p.position) + "</div>" : "") +
         (!U.isBlank(p.dark_horse_category) ? '<div class="card-ribbon"><span>' + U.esc(p.dark_horse_category) + "</span></div>" : "") +
         '<div class="card-nameplate">' +
+          (!U.isBlank(p.archetype) ? '<div class="card-kicker">' + U.esc(p.archetype) + "</div>" : "") +
           '<div class="card-name">' + U.esc(p.display_name) + "</div>" +
           (metaParts.length ? '<div class="card-meta">' + U.esc(metaParts.join(" · ")) + "</div>" : "") +
           (teamLine ? '<div class="card-team">' + U.esc(teamLine) + "</div>" : "") +
@@ -289,22 +290,26 @@
       : '<div class="profile-photo-fallback">' + U.esc(initials(p.display_name)) + "</div>";
 
     container.innerHTML =
-      '<div class="profile-close-bar"><div class="profile-back" id="profile-back-btn">← Back to players</div></div>' +
       '<div class="profile-wrap">' +
+        '<div class="profile-back" id="profile-back-btn">← Back to players</div>' +
+        '<button type="button" class="profile-close-x" id="profile-close-btn" aria-label="Close">×</button>' +
         '<div class="profile-hero">' +
           photoHTML +
           "<div>" +
             (!U.isBlank(p.player_stage) ? '<div class="profile-stage">' + U.esc(p.player_stage) + "</div>" : "") +
+            (!U.isBlank(p.archetype) ? '<div class="profile-kicker">' + U.esc(p.archetype) + "</div>" : "") +
             '<div class="profile-name">' + U.esc(p.display_name) + "</div>" +
             (badgeParts.length ? '<div class="profile-badges">' + badgeParts.map((b) => "<span>" + U.esc(b) + "</span>").join("") + "</div>" : "") +
             (teamLine ? '<div class="profile-team">' + U.esc(teamLine) + "</div>" : "") +
           "</div>" +
         "</div>" +
+        // Skills come right after the identity block, before any prose —
+        // reads as "here's what he can do" first, "here's the story" second.
+        traitsSection(p, traitLabels) +
         (!U.isBlank(p.scouting_snapshot) ? '<div class="profile-quote">' + U.esc(p.scouting_snapshot) + "</div>" : "") +
         (!U.isBlank(p.scouting_summary) ? '<div class="section-text profile-summary">' + U.esc(p.scouting_summary) + "</div>" : "") +
         filmSection(p) +
         overviewSection(p) +
-        traitsSection(p, traitLabels) +
         scoutingReportSection(p) +
         comparisonsSection(p) +
         careerSection(p) +
@@ -315,9 +320,12 @@
 
     container.classList.remove("hidden");
     document.body.style.overflow = "hidden";
-    window.scrollTo(0, 0);
+    container.scrollTop = 0;
     window.requestAnimationFrame(() => container.classList.add("is-open"));
     $("#profile-back-btn", container).addEventListener("click", onBack);
+    $("#profile-close-btn", container).addEventListener("click", onBack);
+    // Clicking the dimmed backdrop (outside the card) closes it too.
+    container.onclick = (e) => { if (e.target === container) onBack(); };
   }
 
   window.APP_RENDER = {
