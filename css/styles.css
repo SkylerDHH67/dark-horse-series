@@ -354,29 +354,37 @@ button{ font-family: inherit; }
 .card-team{ font-size: 11.5px; color: var(--text-faint); margin-top: 2px; }
 .card-traits{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 
-/* Icon-only trait badge — no visible label, just the skill icon on a light
-   grey chip so it reads clearly against the dark card. The trait name is
-   still available on hover/long-press (title) and to screen readers (alt),
-   it's just no longer printed as text. */
+/* Icon-only trait badge. Tile styling now echoes the same clipped-corner,
+   card-stock material used on the photo frames — a small warm gradient tile
+   with a single corner cut — so the icons read as part of the sheet's own
+   design system rather than a plain flat sticker dropped on top. Every
+   image inside is object-fit:contain, so the full source graphic (including
+   any label text baked into the icon) always shows — nothing is ever
+   cropped, regardless of that icon's original aspect ratio. */
 .trait-chip{
   display: inline-flex; align-items: center; justify-content: center;
-  width: 52px; height: 52px; flex-shrink: 0;
-  background: #e9e7e2; border-radius: 12px; padding: 5px;
+  width: 56px; height: 56px; flex-shrink: 0;
+  background: linear-gradient(165deg, #efece4, #dcd7c8);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 10px; padding: 7px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -2px 4px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.2);
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
 }
 .trait-mono{
   font-family: var(--data); font-size: 15px; font-weight: 700; color: #16130a;
-  background: var(--gold-bright); border-radius: 8px;
+  background: var(--gold-bright); border-radius: 6px;
   width: 100%; height: 100%; display: inline-flex; align-items: center; justify-content: center;
 }
-/* Skill icon badge — replaces the letter-monogram chip wherever a trait
-   has a matching icon image. */
+/* Skill icon — always shows the full image (never cropped) at a consistent
+   scale inside the tile, whatever the source graphic's own aspect ratio. */
 .trait-icon{
-  width: 100%; height: 100%; border-radius: 8px; object-fit: contain;
+  width: 100%; height: 100%; border-radius: 6px;
+  object-fit: contain; object-position: center; display: block;
 }
 .profile-traits{ margin-top: 0; }
-/* Bigger, more prominent icons in the expanded profile — skills read as the
-   first real content block there, not an afterthought. */
-.profile-traits .trait-chip{ width: 84px; height: 84px; padding: 10px; }
+/* Slightly larger in the expanded profile, but still compact — skills are
+   the first real content block there, not an afterthought. */
+.profile-traits .trait-chip{ width: 72px; height: 72px; padding: 8px; }
 
 /* Small uppercase "kicker" label (archetype) above a name — a quick-read
    descriptor line, same idea as a spec-sheet header. */
@@ -409,7 +417,7 @@ button{ font-family: inherit; }
 .profile-wrap{
   position: relative; max-width: 760px; width: 100%; margin: 0 auto;
   background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 20px;
-  padding: 56px 24px 40px;
+  padding: 46px 22px 28px;
   box-shadow: 0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.02);
   transform: translateY(18px) scale(0.97);
   transition: transform .32s cubic-bezier(.16,.84,.44,1);
@@ -453,7 +461,7 @@ button{ font-family: inherit; }
 .profile-close-x:hover{ color: var(--ice-bright); border-color: var(--ice); }
 .profile-close-x:active{ transform: scale(0.92); }
 
-.profile-hero{ display: flex; gap: 22px; align-items: flex-start; margin-bottom: 8px; }
+.profile-hero{ display: flex; gap: 18px; align-items: flex-start; margin-bottom: 4px; }
 .profile-photo, .profile-photo-fallback{
   width: 130px; height: 180px; border-radius: var(--radius-sm);
   object-fit: cover; object-position: 50% 0%; background: linear-gradient(160deg, #1c1c1f, #0f0f11);
@@ -485,37 +493,41 @@ button{ font-family: inherit; }
 .profile-team{ font-size: 13px; color: var(--text-faint); margin-top: 8px; }
 
 .profile-quote{
-  font-family: var(--display); font-weight: 500; font-size: 18px; color: var(--gold-bright);
-  margin: 24px 0 14px; padding-left: 16px; border-left: 2px solid var(--gold);
+  font-family: var(--display); font-weight: 500; font-size: 16px; color: var(--gold-bright);
+  margin: 14px 0 8px; padding-left: 14px; border-left: 2px solid var(--gold);
 }
-.profile-summary{ margin-bottom: 26px; }
+.profile-summary{ margin-bottom: 16px; }
 
-.section{ margin-bottom: 28px; }
+/* Condensed rhythm throughout: tighter section spacing, a quieter section
+   label (smaller, no full-width divider) so the eye reads the content
+   itself first instead of a run of headers, and less line-height/padding
+   everywhere so the whole profile takes noticeably less scrolling. */
+.section{ margin-bottom: 16px; }
 .section-title{
-  font-family: var(--data); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
-  margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-soft);
+  font-family: var(--data); font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-faint);
+  margin-bottom: 7px; padding-bottom: 0; border-bottom: none; opacity: 0.85;
 }
-.section-text{ font-size: 15px; line-height: 1.65; color: var(--text-dim); }
-.kv-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+.section-text{ font-size: 14px; line-height: 1.5; color: var(--text-dim); }
+.kv-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
 .kv{ min-width: 0; }
-.kv-label{ font-family: var(--data); font-size: 10px; letter-spacing: 0.04em; color: var(--text-faint); margin-bottom: 3px; }
-.kv-value{ font-size: 14.5px; color: var(--text); }
+.kv-label{ font-family: var(--data); font-size: 9.5px; letter-spacing: 0.04em; color: var(--text-faint); margin-bottom: 2px; }
+.kv-value{ font-size: 14px; color: var(--text); }
 
-.report-block{ margin-bottom: 16px; }
+.report-block{ margin-bottom: 10px; }
 .report-block:last-child{ margin-bottom: 0; }
-.report-label{ font-size: 12px; color: var(--text-faint); margin-bottom: 6px; font-weight: 600; }
+.report-label{ font-size: 11.5px; color: var(--text-faint); margin-bottom: 4px; font-weight: 600; }
 
-.tag-list{ display: flex; flex-direction: column; gap: 8px; }
-.tag-item{ display: flex; gap: 10px; font-size: 14.5px; color: var(--text-dim); line-height: 1.5; }
+.tag-list{ display: flex; flex-direction: column; gap: 5px; }
+.tag-item{ display: flex; gap: 8px; font-size: 14px; color: var(--text-dim); line-height: 1.4; }
 .tag-item::before{ content: "—"; color: var(--gold); flex-shrink: 0; }
 
-.disclaimer{ font-size: 12px; color: var(--text-faint); margin-top: 10px; font-style: italic; }
+.disclaimer{ font-size: 11.5px; color: var(--text-faint); margin-top: 6px; font-style: italic; }
 
-.film-row{ display: flex; gap: 10px; flex-wrap: wrap; }
+.film-row{ display: flex; gap: 8px; flex-wrap: wrap; }
 .film-btn{
-  display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px;
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px;
   border: 1px solid var(--gold); border-radius: 999px; color: var(--gold-bright);
-  font-size: 13.5px; font-weight: 600;
+  font-size: 13px; font-weight: 600;
   transition: background .15s ease, transform .12s ease, border-color .15s ease;
 }
 .film-btn:hover{ background: rgba(201,169,97,0.1); }
@@ -527,12 +539,12 @@ button{ font-family: inherit; }
 
 .contact-box{
   background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius);
-  padding: 16px 18px; font-size: 14px; color: var(--text-dim); line-height: 1.6;
+  padding: 13px 16px; font-size: 13.5px; color: var(--text-dim); line-height: 1.5;
 }
 .contact-box b{ color: var(--text); }
 
 .profile-credit{
-  text-align: center; margin-top: 44px; padding-top: 20px;
+  text-align: center; margin-top: 22px; padding-top: 12px;
   border-top: 1px solid var(--line-soft);
   font-family: var(--data); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--text-faint); opacity: 0.75;
@@ -582,5 +594,6 @@ button{ font-family: inherit; }
   .profile-name{ font-size: 24px; }
   .profile-photo, .profile-photo-fallback{ width: 104px; height: 144px; }
   .profile-overlay{ padding: 20px 8px; }
-  .profile-wrap{ padding: 52px 16px 32px; border-radius: 16px; }
+  .profile-wrap{ padding: 44px 14px 22px; border-radius: 16px; }
+  .profile-traits .trait-chip{ width: 62px; height: 62px; padding: 7px; }
 }
