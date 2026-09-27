@@ -360,6 +360,12 @@ button{ font-family: inherit; }
   background: var(--gold-bright); border-radius: 999px;
   width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center;
 }
+/* Skill icon badge — replaces the letter-monogram chip wherever a trait
+   has a matching icon image; same footprint, just imagery instead of text. */
+.trait-icon{
+  width: 18px; height: 18px; border-radius: 50%; object-fit: cover;
+  flex-shrink: 0; background: var(--bg-elevated); border: 1px solid var(--line);
+}
 .profile-traits{ margin-top: 0; }
 
 .empty-state{ text-align: center; padding: 80px 20px; color: var(--text-faint); }

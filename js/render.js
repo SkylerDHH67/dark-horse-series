@@ -27,9 +27,35 @@
     return "";
   }
 
+  // Skill icon images live in images/players/ alongside player photos.
+  // Keyed by the lowercased trait key (same casing p._keyTraits and the
+  // Config sheet's "key" column already use). A trait with no icon here
+  // simply falls back to the old letter-monogram chip — so a brand-new
+  // trait added to the Config sheet never renders blank while waiting
+  // for its icon.
+  const TRAIT_ICON_MAP = {
+    shooting: "images/players/shootingskill.jpeg",
+    passing: "images/players/passingskill.jpeg",
+    "shot creation": "images/players/shotcreationskill.jpeg",
+    "decision making": "images/players/decisionmakingskill.jpeg",
+    "poa defense": "images/players/poadefenseskill.jpeg",
+    switchability: "images/players/switchskill.jpeg",
+    "rim protection": "images/players/rimproskill.jpeg",
+    rebounding: "images/players/rebskill.jpeg",
+    transition: "images/players/transkill.jpeg",
+    motor: "images/players/motorskill.jpeg",
+    feel: "images/players/feelskill.jpeg",
+    athleticism: "images/players/athskill.jpeg",
+    potential: "images/players/potskill.jpeg",
+  };
+
   function traitChip(key, traitLabels) {
     const label = traitLabels[key] || key.replace(/_/g, " ");
-    return '<span class="trait-chip"><span class="trait-mono">' + U.esc(U.monogram(key)) + '</span>' + U.esc(label) + "</span>";
+    const iconSrc = TRAIT_ICON_MAP[key];
+    const badge = iconSrc
+      ? '<img class="trait-icon" src="' + iconSrc + '" alt="" loading="lazy">'
+      : '<span class="trait-mono">' + U.esc(U.monogram(key)) + "</span>";
+    return '<span class="trait-chip">' + badge + U.esc(label) + "</span>";
   }
 
   // Buckets a free-text position into a broad group so the card can carry a
