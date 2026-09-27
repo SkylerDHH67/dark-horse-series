@@ -62,13 +62,16 @@
   // trait's own icon URL from the player's row (trait_1..trait_4), when the
   // player has one — takes priority over the shared TRAIT_ICON_MAP so each
   // player can eventually carry their own icon per strength.
+  // Icon-only now — no visible label text on the chip itself. The trait
+  // name still travels with it as a hover tooltip (title) and as image alt
+  // text, so it isn't lost, just no longer printed.
   function traitChip(key, traitLabels, perPlayerIconUrl) {
     const label = traitLabels[key] || key.replace(/_/g, " ");
     const iconSrc = looksLikeImageUrl(perPlayerIconUrl) ? perPlayerIconUrl : TRAIT_ICON_MAP[key];
     const badge = iconSrc
-      ? '<img class="trait-icon" src="' + U.esc(iconSrc) + '" alt="" loading="lazy">'
+      ? '<img class="trait-icon" src="' + U.esc(iconSrc) + '" alt="' + U.esc(label) + '" loading="lazy">'
       : '<span class="trait-mono">' + U.esc(U.monogram(key)) + "</span>";
-    return '<span class="trait-chip">' + badge + U.esc(label) + "</span>";
+    return '<span class="trait-chip" title="' + U.esc(label) + '">' + badge + "</span>";
   }
 
   // Buckets a free-text position into a broad group so the card can carry a
