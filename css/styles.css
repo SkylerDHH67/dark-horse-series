@@ -354,37 +354,38 @@ button{ font-family: inherit; }
 .card-team{ font-size: 11.5px; color: var(--text-faint); margin-top: 2px; }
 .card-traits{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 
-/* Icon-only trait badge. Tile styling now echoes the same clipped-corner,
-   card-stock material used on the photo frames — a small warm gradient tile
-   with a single corner cut — so the icons read as part of the sheet's own
-   design system rather than a plain flat sticker dropped on top. Every
-   image inside is object-fit:contain, so the full source graphic (including
-   any label text baked into the icon) always shows — nothing is ever
-   cropped, regardless of that icon's original aspect ratio. */
+/* Icon-only trait badge — a small gold tile (matching the site's brand
+   gold, same token used on names/kickers) with a single clipped corner,
+   echoing the photo frames. Tile is intentionally compact and padding is
+   tight so the icon itself reads as large as possible against it. Every
+   image inside is object-fit:contain, so the full source graphic always
+   shows — nothing is ever cropped, regardless of aspect ratio — and the
+   icons themselves now have a transparent background, so they sit
+   directly on the gold rather than showing a white box. */
 .trait-chip{
   display: inline-flex; align-items: center; justify-content: center;
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: linear-gradient(165deg, #efece4, #dcd7c8);
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 10px; padding: 7px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -2px 4px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.2);
-  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+  width: 50px; height: 50px; flex-shrink: 0;
+  background: linear-gradient(165deg, var(--gold-bright), var(--gold));
+  border: 1px solid rgba(22,19,10,0.25);
+  border-radius: 10px; padding: 2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.18), 0 2px 5px rgba(0,0,0,0.25);
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
 }
 .trait-mono{
-  font-family: var(--data); font-size: 15px; font-weight: 700; color: #16130a;
-  background: var(--gold-bright); border-radius: 6px;
+  font-family: var(--data); font-size: 14px; font-weight: 700; color: var(--gold-bright);
+  background: #16130a; border-radius: 6px;
   width: 100%; height: 100%; display: inline-flex; align-items: center; justify-content: center;
 }
 /* Skill icon — always shows the full image (never cropped) at a consistent
    scale inside the tile, whatever the source graphic's own aspect ratio. */
 .trait-icon{
-  width: 100%; height: 100%; border-radius: 6px;
+  width: 100%; height: 100%; border-radius: 4px;
   object-fit: contain; object-position: center; display: block;
 }
 .profile-traits{ margin-top: 0; }
 /* Slightly larger in the expanded profile, but still compact — skills are
    the first real content block there, not an afterthought. */
-.profile-traits .trait-chip{ width: 72px; height: 72px; padding: 8px; }
+.profile-traits .trait-chip{ width: 64px; height: 64px; padding: 2px; }
 
 /* Small uppercase "kicker" label (archetype) above a name — a quick-read
    descriptor line, same idea as a spec-sheet header. */
@@ -639,6 +640,6 @@ button{ font-family: inherit; }
   .profile-photo, .profile-photo-fallback{ width: 104px; height: 144px; }
   .profile-overlay{ padding: 20px 8px; }
   .profile-wrap{ padding: 44px 14px 22px; border-radius: 16px; }
-  .profile-traits .trait-chip{ width: 62px; height: 62px; padding: 7px; }
+  .profile-traits .trait-chip{ width: 56px; height: 56px; padding: 2px; }
   .profile-bio .kv-grid{ grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
 }

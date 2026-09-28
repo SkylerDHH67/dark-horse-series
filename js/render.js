@@ -33,21 +33,24 @@
   // simply falls back to the old letter-monogram chip — so a brand-new
   // trait added to the Config sheet never renders blank while waiting
   // for its icon.
+  // .png now (was .jpeg) — these were reprocessed with a transparent
+  // background so the icon sits cleanly on the gold tile instead of
+  // showing a white box.
   const TRAIT_ICON_MAP = {
-    shooting: "images/players/shootingskill.jpeg",
-    passing: "images/players/passingskill.jpeg",
-    finishing: "images/players/finskill.jpeg",
-    "shot creation": "images/players/shotcreationskill.jpeg",
-    "decision making": "images/players/decisionmakingskill.jpeg",
-    "poa defense": "images/players/poadefenseskill.jpeg",
-    switchability: "images/players/switchskill.jpeg",
-    "rim protection": "images/players/rimproskill.jpeg",
-    rebounding: "images/players/rebskill.jpeg",
-    transition: "images/players/transkill.jpeg",
-    motor: "images/players/motorskill.jpeg",
-    feel: "images/players/feelskill.jpeg",
-    athleticism: "images/players/athskill.jpeg",
-    potential: "images/players/potskill.jpeg",
+    shooting: "images/players/shootingskill.png",
+    passing: "images/players/passingskill.png",
+    finishing: "images/players/finskill.png",
+    "shot creation": "images/players/shotcreationskill.png",
+    "decision making": "images/players/decisionmakingskill.png",
+    "poa defense": "images/players/poadefenseskill.png",
+    switchability: "images/players/switchskill.png",
+    "rim protection": "images/players/rimproskill.png",
+    rebounding: "images/players/rebskill.png",
+    transition: "images/players/transkill.png",
+    motor: "images/players/motorskill.png",
+    feel: "images/players/feelskill.png",
+    athleticism: "images/players/athskill.png",
+    potential: "images/players/potskill.png",
   };
 
   // A per-player trait_1..trait_4 cell only counts as an icon once it's an
