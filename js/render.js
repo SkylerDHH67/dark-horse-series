@@ -33,29 +33,23 @@
   // simply falls back to the old letter-monogram chip — so a brand-new
   // trait added to the Config sheet never renders blank while waiting
   // for its icon.
-  // .png now (was .jpeg) — these were reprocessed with a transparent
-  // background so the icon sits cleanly on the gold tile instead of
-  // showing a white box.
   const TRAIT_ICON_MAP = {
-    shooting: "images/players/shootingskill.png",
-    passing: "images/players/passingskill.png",
-    finishing: "images/players/finskill.png",
-    "shot creation": "images/players/shotcreationskill.png",
-    creation: "images/players/shotcreationskill.png",
-    "decision making": "images/players/decisionmakingskill.png",
-    "poa defense": "images/players/poadefenseskill.png",
-    switchability: "images/players/switchskill.png",
-    "rim protection": "images/players/rimproskill.png",
-    // "rim_pressure" shows up in the sheet on one row — looks like a typo
-    // for rim_protection, so it's aliased to the same icon rather than
-    // falling back to a bare letter chip. Worth a sheet cleanup pass.
-    "rim pressure": "images/players/rimproskill.png",
-    rebounding: "images/players/rebskill.png",
-    transition: "images/players/transkill.png",
-    motor: "images/players/motorskill.png",
-    feel: "images/players/feelskill.png",
-    athleticism: "images/players/athskill.png",
-    potential: "images/players/potskill.png",
+    shooting: "images/players/shootingskill.jpeg",
+    passing: "images/players/passingskill.jpeg",
+    finishing: "images/players/finskill.jpeg",
+    "shot creation": "images/players/shotcreationskill.jpeg",
+    creation: "images/players/shotcreationskill.jpeg",
+    "decision making": "images/players/decisionmakingskill.jpeg",
+    "poa defense": "images/players/poadefenseskill.jpeg",
+    switchability: "images/players/switchskill.jpeg",
+    "rim protection": "images/players/rimproskill.jpeg",
+    "rim pressure": "images/players/rimproskill.jpeg",
+    rebounding: "images/players/rebskill.jpeg",
+    transition: "images/players/transkill.jpeg",
+    motor: "images/players/motorskill.jpeg",
+    feel: "images/players/feelskill.jpeg",
+    athleticism: "images/players/athskill.jpeg",
+    potential: "images/players/potskill.jpeg",
   };
 
   // key_strengths cells mix underscore_case ("poa_defense") and plain
@@ -78,8 +72,9 @@
   // trait's own icon URL from the player's row (trait_1..trait_4), when the
   // player has one — takes priority over the shared TRAIT_ICON_MAP so each
   // player can eventually carry their own icon per strength.
-  // The tile stays icon-first, but the trait name now prints again as a
-  // small caption underneath — the tooltip/alt text still carry it too.
+  // Icon-only — no visible label text on the chip itself. The trait name
+  // still travels with it as a hover tooltip (title) and as image alt
+  // text, so it isn't lost, just not printed underneath.
   function traitChip(key, traitLabels, perPlayerIconUrl) {
     const normKey = normalizeTraitKey(key);
     const label = traitLabels[normKey] || traitLabels[key] || normKey;
@@ -87,10 +82,7 @@
     const badge = iconSrc
       ? '<img class="trait-icon" src="' + U.esc(iconSrc) + '" alt="' + U.esc(label) + '" loading="lazy">'
       : '<span class="trait-mono">' + U.esc(U.monogram(key)) + "</span>";
-    return '<span class="trait-item" title="' + U.esc(label) + '">' +
-      '<span class="trait-chip">' + badge + "</span>" +
-      '<span class="trait-label">' + U.esc(label) + "</span>" +
-      "</span>";
+    return '<span class="trait-chip" title="' + U.esc(label) + '">' + badge + "</span>";
   }
 
   // Buckets a free-text position into a broad group so the card can carry a
