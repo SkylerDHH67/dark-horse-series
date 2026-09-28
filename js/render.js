@@ -214,7 +214,10 @@
     return '<div class="tag-list">' + vals.map((v) => '<div class="tag-item">' + U.esc(v) + "</div>").join("") + "</div>";
   }
 
-  function overviewSection(p) {
+  // Biometric/vitals grid — lives directly beside the photo in the hero
+  // now, so it's the one place this data appears (it used to also repeat
+  // across a row of badge pills further up), removing that duplication.
+  function bioGrid(p) {
     const items = [];
     if (p._age !== null && p._age !== undefined) items.push(["Age", p._age]);
     else if (!U.isBlank(p.birth_year)) items.push(["Birth Year", p.birth_year]);
@@ -224,22 +227,28 @@
     if (!U.isBlank(p.position)) items.push(["Position", p.position]);
     if (!U.isBlank(p.secondary_position)) items.push(["Secondary", p.secondary_position]);
     if (!U.isBlank(p.nationality)) items.push(["Nationality", p.nationality]);
-    if (!U.isBlank(p.current_team)) items.push(["Current Team", p.current_team]);
-    if (!U.isBlank(p.current_league)) items.push(["League", p.current_league]);
     if (!U.isBlank(p.contract_status)) items.push(["Status", p.contract_status]);
-    return items.length ? sectionWrap("Overview", kvGrid(items)) : "";
+    if (!items.length) return "";
+    return '<div class="profile-bio"><div class="profile-bio-label">Vitals</div>' + kvGrid(items) + "</div>";
   }
 
   function traitsSection(p, traitLabels) {
     if (!p._keyTraits.length) return "";
-    return sectionWrap("Key Traits", '<div class="card-traits profile-traits">' + p._keyTraits.map((t, i) => traitChip(t, traitLabels, p["trait_" + (i + 1)])).join("") + "</div>");
+    return sectionWrap("Key Skills", '<div class="card-traits profile-traits">' + p._keyTraits.map((t, i) => traitChip(t, traitLabels, p["trait_" + (i + 1)])).join("") + "</div>");
+  }
+
+  // The quote + prose summary, grouped and titled together as the read/
+  // analysis block — sits right after the hero, before skills and film.
+  function takeSection(p) {
+    let html = "";
+    if (!U.isBlank(p.scouting_snapshot)) html += '<div class="profile-quote">' + U.esc(p.scouting_snapshot) + "</div>";
+    if (!U.isBlank(p.scouting_summary)) html += '<div class="section-text profile-summary">' + U.esc(p.scouting_summary) + "</div>";
+    return html ? sectionWrap("Scouting Take", html) : "";
   }
 
   function scoutingReportSection(p) {
-    const strengths = [p.strength_1, p.strength_2, p.strength_3, p.strength_4].filter((v) => !U.isBlank(v));
     const dev = [p.development_area_1, p.development_area_2].filter((v) => !U.isBlank(v));
     let html = "";
-    if (strengths.length) html += '<div class="report-block"><div class="report-label">Strengths</div>' + tagList(strengths) + "</div>";
     if (dev.length) html += '<div class="report-block"><div class="report-label">Development Areas</div>' + tagList(dev) + "</div>";
     if (!U.isBlank(p.role_projection)) html += '<div class="report-block"><div class="report-label">Role Projection</div><div class="section-text">' + U.esc(p.role_projection) + "</div></div>";
     if (!U.isBlank(p.best_usage)) html += '<div class="report-block"><div class="report-label">Best Usage</div><div class="section-text">' + U.esc(p.best_usage) + "</div></div>";
@@ -282,7 +291,6 @@
   }
 
   function renderProfile(container, p, traitLabels, onBack) {
-    const badgeParts = [p.height, p.position, cardYear(p), p.nationality].filter((v) => !U.isBlank(v));
     const teamLine = [p.current_team, p.current_league].filter((v) => !U.isBlank(v)).join(" · ");
 
     const photoHTML = !U.isBlank(p.photo_url)
@@ -295,21 +303,22 @@
         '<button type="button" class="profile-close-x" id="profile-close-btn" aria-label="Close">×</button>' +
         '<div class="profile-hero">' +
           photoHTML +
-          "<div>" +
+          '<div class="profile-id">' +
             (!U.isBlank(p.player_stage) ? '<div class="profile-stage">' + U.esc(p.player_stage) + "</div>" : "") +
             (!U.isBlank(p.archetype) ? '<div class="profile-kicker">' + U.esc(p.archetype) + "</div>" : "") +
             '<div class="profile-name">' + U.esc(p.display_name) + "</div>" +
-            (badgeParts.length ? '<div class="profile-badges">' + badgeParts.map((b) => "<span>" + U.esc(b) + "</span>").join("") + "</div>" : "") +
             (teamLine ? '<div class="profile-team">' + U.esc(teamLine) + "</div>" : "") +
+            // All biometric/vitals data lives here now, right beside the
+            // photo — it used to also repeat in a row of badges above the
+            // Overview section further down; that duplication is gone.
+            bioGrid(p) +
           "</div>" +
         "</div>" +
-        // Skills come right after the identity block, before any prose —
-        // reads as "here's what he can do" first, "here's the story" second.
+        // Read/analysis first, then skills, then film — matches how a
+        // scout actually consumes a profile: verdict, then evidence, then tape.
+        takeSection(p) +
         traitsSection(p, traitLabels) +
-        (!U.isBlank(p.scouting_snapshot) ? '<div class="profile-quote">' + U.esc(p.scouting_snapshot) + "</div>" : "") +
-        (!U.isBlank(p.scouting_summary) ? '<div class="section-text profile-summary">' + U.esc(p.scouting_summary) + "</div>" : "") +
         filmSection(p) +
-        overviewSection(p) +
         scoutingReportSection(p) +
         comparisonsSection(p) +
         careerSection(p) +

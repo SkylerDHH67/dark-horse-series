@@ -419,23 +419,49 @@ button{ font-family: inherit; }
   background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 20px;
   padding: 46px 22px 28px;
   box-shadow: 0 30px 70px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.02);
-  transform: translateY(18px) scale(0.97);
-  transition: transform .32s cubic-bezier(.16,.84,.44,1);
+  /* Fresh DOM node every time a profile opens, so this entrance plays on
+     its own — an electric "materializing" settle rather than a plain
+     fade/slide: it snaps into focus through a hot blur/brightness flash,
+     overshoots slightly, then settles like power stabilizing. */
+  animation: materialize .6s cubic-bezier(.16,.84,.44,1) both;
 }
-.profile-overlay.is-open .profile-wrap{ transform: translateY(0) scale(1); }
+@keyframes materialize{
+  0%{ opacity: 0; transform: scale(0.9) translateY(16px); filter: blur(9px) brightness(1.7); }
+  20%{ opacity: 1; filter: blur(2px) brightness(2); }
+  38%{ filter: blur(0) brightness(1.15); transform: scale(1.018) translateY(-3px); }
+  58%{ transform: scale(0.996) translateY(1px); }
+  78%{ transform: scale(1.004) translateY(-0.5px); }
+  100%{ opacity: 1; transform: scale(1) translateY(0); filter: blur(0) brightness(1); }
+}
 
-/* A brief one-shot light line tracing the card's own top edge on open — a
-   quiet "impact frame" that reads as a scan/reveal rather than a decoration. */
+/* A quick electric flash around the card's edges on open — ice-blue,
+   the system-accent color, briefly surging then dissipating. */
+.profile-wrap::after{
+  content: ""; position: absolute; inset: 0; border-radius: 20px; pointer-events: none;
+  animation: electric-pulse .8s ease-out both;
+}
+@keyframes electric-pulse{
+  0%{ box-shadow: 0 0 0 0 rgba(110,198,222,0); }
+  14%{ box-shadow: 0 0 34px 6px rgba(110,198,222,0.6); }
+  32%{ box-shadow: 0 0 14px 2px rgba(110,198,222,0.28); }
+  100%{ box-shadow: 0 0 0 0 rgba(110,198,222,0); }
+}
+
+/* A brief flickering light line tracing the card's own top edge on open —
+   double-pulses like a current arcing across, then settles. */
 .profile-wrap::before{
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 10;
   border-radius: 20px 20px 0 0;
-  background: linear-gradient(90deg, transparent, var(--ice-bright), var(--gold-bright), transparent);
+  background: linear-gradient(90deg, transparent, var(--ice-bright), var(--gold-bright), var(--ice-bright), transparent);
   opacity: 0; pointer-events: none;
+  animation: electric-sweep .85s ease-out both;
 }
-.profile-overlay.is-open .profile-wrap::before{ animation: reveal-sweep .7s ease-out forwards; }
-@keyframes reveal-sweep{
-  0%{ opacity: 0; transform: scaleX(0.25); }
-  35%{ opacity: 1; transform: scaleX(1); }
+@keyframes electric-sweep{
+  0%{ opacity: 0; transform: scaleX(0.2); }
+  10%{ opacity: 1; transform: scaleX(0.5); }
+  24%{ opacity: 0.25; transform: scaleX(0.7); }
+  38%{ opacity: 1; transform: scaleX(1); }
+  62%{ opacity: 0.4; }
   100%{ opacity: 0; transform: scaleX(1); }
 }
 
@@ -461,7 +487,7 @@ button{ font-family: inherit; }
 .profile-close-x:hover{ color: var(--ice-bright); border-color: var(--ice); }
 .profile-close-x:active{ transform: scale(0.92); }
 
-.profile-hero{ display: flex; gap: 18px; align-items: flex-start; margin-bottom: 4px; }
+.profile-hero{ display: flex; gap: 18px; align-items: flex-start; margin-bottom: 4px; flex-wrap: wrap; }
 .profile-photo, .profile-photo-fallback{
   width: 130px; height: 180px; border-radius: var(--radius-sm);
   object-fit: cover; object-position: 50% 0%; background: linear-gradient(160deg, #1c1c1f, #0f0f11);
@@ -469,18 +495,19 @@ button{ font-family: inherit; }
   clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
 }
 .profile-photo-fallback{ display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 600; font-size: 34px; color: var(--line); }
+.profile-id{ flex: 1 1 200px; min-width: 0; }
 
-/* Staggered "surfacing" reveal on the hero block — information arriving
-   in sequence rather than all at once. Purely CSS, respects reduced motion
-   via the global rule above. */
-.profile-stage, .profile-name, .profile-badges, .profile-team, .profile-quote{
+/* Staggered "surfacing" reveal on the hero block — identity + vitals
+   arriving in sequence rather than all at once. Purely CSS, respects
+   reduced motion via the global rule above. */
+.profile-stage, .profile-kicker, .profile-name, .profile-team, .profile-bio{
   animation: reveal-up .5s cubic-bezier(.16,.84,.44,1) both;
 }
 .profile-stage{ animation-delay: .04s; }
-.profile-name{ animation-delay: .09s; }
-.profile-badges{ animation-delay: .15s; }
-.profile-team{ animation-delay: .19s; }
-.profile-quote{ animation-delay: .24s; }
+.profile-kicker{ animation-delay: .07s; }
+.profile-name{ animation-delay: .11s; }
+.profile-team{ animation-delay: .16s; }
+.profile-bio{ animation-delay: .21s; }
 @keyframes reveal-up{
   from{ opacity: 0; transform: translateY(8px); }
   to{ opacity: 1; transform: translateY(0); }
@@ -488,29 +515,42 @@ button{ font-family: inherit; }
 
 .profile-stage{ font-family: var(--data); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ice); margin-bottom: 6px; }
 .profile-name{ font-family: var(--display); font-size: 28px; font-weight: 700; line-height: 1.1; margin-bottom: 6px; }
-.profile-badges{ display: flex; flex-wrap: wrap; gap: 8px; font-size: 12.5px; color: var(--text-dim); }
-.profile-badges span{ border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; }
-.profile-team{ font-size: 13px; color: var(--text-faint); margin-top: 8px; }
+.profile-team{ font-size: 13px; color: var(--text-faint); margin-top: 2px; }
+
+/* Vitals — every biometric field lives here now, directly beside the
+   photo, instead of also repeating as a row of badge pills. Ice-tinted
+   labels, matching the "technical read-out" role ice plays elsewhere. */
+.profile-bio{ margin-top: 12px; }
+.profile-bio-label{
+  font-family: var(--data); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ice); opacity: 0.8; margin-bottom: 7px;
+}
+.profile-bio .kv-grid{ grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px 16px; }
 
 .profile-quote{
   font-family: var(--display); font-weight: 500; font-size: 16px; color: var(--gold-bright);
-  margin: 14px 0 8px; padding-left: 14px; border-left: 2px solid var(--gold);
+  margin: 0 0 8px; padding-left: 14px; border-left: 2px solid var(--gold);
 }
-.profile-summary{ margin-bottom: 16px; }
+.profile-summary{ margin-bottom: 0; }
 
-/* Condensed rhythm throughout: tighter section spacing, a quieter section
-   label (smaller, no full-width divider) so the eye reads the content
-   itself first instead of a run of headers, and less line-height/padding
-   everywhere so the whole profile takes noticeably less scrolling. */
-.section{ margin-bottom: 16px; }
+/* Condensed rhythm throughout: tighter section spacing, but each section
+   title is now big, bold, and marked with a short ice tick — unmistakable
+   at a glance which part of the card you're looking at. */
+.section{ margin-bottom: 18px; }
 .section-title{
-  font-family: var(--data); font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-faint);
-  margin-bottom: 7px; padding-bottom: 0; border-bottom: none; opacity: 0.85;
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--display); font-size: 15px; font-weight: 800; letter-spacing: 0.005em;
+  text-transform: none; color: var(--text);
+  margin-bottom: 10px; padding-bottom: 0; border-bottom: none;
+}
+.section-title::before{
+  content: ""; width: 3px; height: 15px; flex-shrink: 0; border-radius: 2px;
+  background: var(--ice); box-shadow: 0 0 7px var(--ice-dim);
 }
 .section-text{ font-size: 14px; line-height: 1.5; color: var(--text-dim); }
 .kv-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
 .kv{ min-width: 0; }
-.kv-label{ font-family: var(--data); font-size: 9.5px; letter-spacing: 0.04em; color: var(--text-faint); margin-bottom: 2px; }
+.kv-label{ font-family: var(--data); font-size: 9.5px; letter-spacing: 0.04em; color: var(--ice); opacity: 0.85; margin-bottom: 2px; }
 .kv-value{ font-size: 14px; color: var(--text); }
 
 .report-block{ margin-bottom: 10px; }
@@ -523,14 +563,16 @@ button{ font-family: inherit; }
 
 .disclaimer{ font-size: 11.5px; color: var(--text-faint); margin-top: 6px; font-style: italic; }
 
+/* Film is a technical/tape action, not a player-identity one — ice, not
+   gold, matching the same rationale used for filters and focus states. */
 .film-row{ display: flex; gap: 8px; flex-wrap: wrap; }
 .film-btn{
   display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px;
-  border: 1px solid var(--gold); border-radius: 999px; color: var(--gold-bright);
+  border: 1px solid var(--ice); border-radius: 999px; color: var(--ice-bright);
   font-size: 13px; font-weight: 600;
-  transition: background .15s ease, transform .12s ease, border-color .15s ease;
+  transition: background .15s ease, transform .12s ease, border-color .15s ease, box-shadow .15s ease;
 }
-.film-btn:hover{ background: rgba(201,169,97,0.1); }
+.film-btn:hover{ background: rgba(110,198,222,0.12); box-shadow: 0 0 0 3px var(--ice-dim); }
 .film-btn:active{ transform: scale(0.97); }
 .film-btn-secondary{ border-color: var(--line); color: var(--text-dim); }
 .film-btn-secondary:hover{ background: var(--ice-dim); border-color: var(--ice); color: var(--ice-bright); }
@@ -592,8 +634,11 @@ button{ font-family: inherit; }
 @media (max-width: 480px){
   .audience-title{ font-size: 26px; }
   .profile-name{ font-size: 24px; }
+  .profile-hero{ flex-direction: column; align-items: center; text-align: center; }
+  .profile-id{ width: 100%; text-align: left; }
   .profile-photo, .profile-photo-fallback{ width: 104px; height: 144px; }
   .profile-overlay{ padding: 20px 8px; }
   .profile-wrap{ padding: 44px 14px 22px; border-radius: 16px; }
   .profile-traits .trait-chip{ width: 62px; height: 62px; padding: 7px; }
+  .profile-bio .kv-grid{ grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
 }
