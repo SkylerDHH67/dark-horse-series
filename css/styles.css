@@ -352,16 +352,22 @@ button{ font-family: inherit; }
 .card-name{ font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.15; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
 .card-meta{ font-size: 12px; color: var(--text-dim); margin-top: 3px; }
 .card-team{ font-size: 11.5px; color: var(--text-faint); margin-top: 2px; }
-.card-traits{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.card-traits{ display: flex; flex-wrap: wrap; gap: 10px 8px; margin-top: 8px; }
 
-/* Icon-only trait badge — a small gold tile (matching the site's brand
-   gold, same token used on names/kickers) with a single clipped corner,
-   echoing the photo frames. Tile is intentionally compact and padding is
-   tight so the icon itself reads as large as possible against it. Every
-   image inside is object-fit:contain, so the full source graphic always
-   shows — nothing is ever cropped, regardless of aspect ratio — and the
-   icons themselves now have a transparent background, so they sit
-   directly on the gold rather than showing a white box. */
+/* Icon + caption, stacked. The tile is a small gold badge (matching the
+   site's brand gold, same token used on names/kickers) with a single
+   clipped corner, echoing the photo frames — padding stays tight so the
+   icon reads as large as possible against it. The trait name prints
+   underneath as a small caption, still available via title/alt too. */
+.trait-item{
+  display: inline-flex; flex-direction: column; align-items: center; gap: 5px;
+  width: 50px;
+}
+.trait-label{
+  font-family: var(--data); font-size: 8.5px; letter-spacing: 0.03em; text-transform: uppercase;
+  color: var(--text-faint); text-align: center; line-height: 1.25;
+  max-width: 60px;
+}
 .trait-chip{
   display: inline-flex; align-items: center; justify-content: center;
   width: 50px; height: 50px; flex-shrink: 0;
@@ -377,7 +383,9 @@ button{ font-family: inherit; }
   width: 100%; height: 100%; display: inline-flex; align-items: center; justify-content: center;
 }
 /* Skill icon — always shows the full image (never cropped) at a consistent
-   scale inside the tile, whatever the source graphic's own aspect ratio. */
+   scale inside the tile, whatever the source graphic's own aspect ratio.
+   Icons are a gold/bronze duotone now (tone-on-tone with the tile itself,
+   an engraved-medallion look) rather than the original black + orange. */
 .trait-icon{
   width: 100%; height: 100%; border-radius: 4px;
   object-fit: contain; object-position: center; display: block;
@@ -385,7 +393,9 @@ button{ font-family: inherit; }
 .profile-traits{ margin-top: 0; }
 /* Slightly larger in the expanded profile, but still compact — skills are
    the first real content block there, not an afterthought. */
+.profile-traits .trait-item{ width: 64px; }
 .profile-traits .trait-chip{ width: 64px; height: 64px; padding: 2px; }
+.profile-traits .trait-label{ font-size: 9.5px; max-width: 76px; }
 
 /* Small uppercase "kicker" label (archetype) above a name — a quick-read
    descriptor line, same idea as a spec-sheet header. */
@@ -640,6 +650,7 @@ button{ font-family: inherit; }
   .profile-photo, .profile-photo-fallback{ width: 104px; height: 144px; }
   .profile-overlay{ padding: 20px 8px; }
   .profile-wrap{ padding: 44px 14px 22px; border-radius: 16px; }
+  .profile-traits .trait-item{ width: 56px; }
   .profile-traits .trait-chip{ width: 56px; height: 56px; padding: 2px; }
   .profile-bio .kv-grid{ grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
 }
