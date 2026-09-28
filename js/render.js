@@ -27,54 +27,33 @@
     return "";
   }
 
-  // Skill icon images live in images/players/ alongside player photos.
-  // Keyed by the lowercased trait key (same casing p._keyTraits and the
-  // Config sheet's "key" column already use). A trait with no icon here
-  // simply falls back to the old letter-monogram chip — so a brand-new
-  // trait added to the Config sheet never renders blank while waiting
-  // for its icon.
   const TRAIT_ICON_MAP = {
-    shooting: "images/players/shootingskill.jpeg",
-    passing: "images/players/passingskill.jpeg",
-    finishing: "images/players/finskill.jpeg",
-    "shot creation": "images/players/shotcreationskill.jpeg",
-    creation: "images/players/shotcreationskill.jpeg",
-    "decision making": "images/players/decisionmakingskill.jpeg",
-    "poa defense": "images/players/poadefenseskill.jpeg",
-    switchability: "images/players/switchskill.jpeg",
-    "rim protection": "images/players/rimproskill.jpeg",
-    "rim pressure": "images/players/rimproskill.jpeg",
-    rebounding: "images/players/rebskill.jpeg",
-    transition: "images/players/transkill.jpeg",
-    motor: "images/players/motorskill.jpeg",
-    feel: "images/players/feelskill.jpeg",
-    athleticism: "images/players/athskill.jpeg",
-    potential: "images/players/potskill.jpeg",
+    shooting: "images/players/shootingskill_full.jpeg",
+    passing: "images/players/passingskill_full.jpeg",
+    finishing: "images/players/finskill_full.jpeg",
+    "shot creation": "images/players/shotcreationskill_full.jpeg",
+    creation: "images/players/shotcreationskill_full.jpeg",
+    "decision making": "images/players/decisionmakingskill_full.jpeg",
+    "poa defense": "images/players/poadefenseskill_full.jpeg",
+    switchability: "images/players/switchskill_full.jpeg",
+    "rim protection": "images/players/rimproskill_full.jpeg",
+    "rim pressure": "images/players/rimproskill_full.jpeg",
+    rebounding: "images/players/rebskill_full.jpeg",
+    transition: "images/players/transkill_full.jpeg",
+    motor: "images/players/motorskill_full.jpeg",
+    feel: "images/players/feelskill_full.jpeg",
+    athleticism: "images/players/athskill_full.jpeg",
+    potential: "images/players/potskill_full.jpeg",
   };
 
-  // key_strengths cells mix underscore_case ("poa_defense") and plain
-  // words ("creation") depending on how each row was typed. Normalize to
-  // the map's lowercase-space form so lookups don't silently miss and
-  // fall back to a letter monogram.
   function normalizeTraitKey(key) {
     return String(key || "").trim().toLowerCase().replace(/_/g, " ");
   }
 
-  // A per-player trait_1..trait_4 cell only counts as an icon once it's an
-  // actual image URL — while those cells still hold plain descriptive text
-  // (the pre-migration state), this quietly falls through to the shared
-  // TRAIT_ICON_MAP below instead of rendering a broken image.
   function looksLikeImageUrl(v) {
     return !U.isBlank(v) && /^https?:\/\//i.test(String(v).trim());
   }
 
-  // key: the trait name (from key_strengths). perPlayerIconUrl: that same
-  // trait's own icon URL from the player's row (trait_1..trait_4), when the
-  // player has one — takes priority over the shared TRAIT_ICON_MAP so each
-  // player can eventually carry their own icon per strength.
-  // Icon-only — no visible label text on the chip itself. The trait name
-  // still travels with it as a hover tooltip (title) and as image alt
-  // text, so it isn't lost, just not printed underneath.
   function traitChip(key, traitLabels, perPlayerIconUrl) {
     const normKey = normalizeTraitKey(key);
     const label = traitLabels[normKey] || traitLabels[key] || normKey;
@@ -85,8 +64,6 @@
     return '<span class="trait-chip" title="' + U.esc(label) + '">' + badge + "</span>";
   }
 
-  // Buckets a free-text position into a broad group so the card can carry a
-  // small, consistent, data-driven accent color — never a random/inconsistent one.
   function positionGroup(pos) {
     if (U.isBlank(pos)) return "";
     const p = String(pos).toLowerCase();
@@ -96,9 +73,6 @@
     return "";
   }
 
-  // ---------------------------------------------------------
-  // Audience picker ("Who are you?")
-  // ---------------------------------------------------------
   function renderAudiencePicker(container, audienceOptions, onSelect) {
     container.innerHTML = "";
     audienceOptions.forEach((a) => {
@@ -111,9 +85,6 @@
     });
   }
 
-  // ---------------------------------------------------------
-  // Stage tabs (Professional / College / Youth / All)
-  // ---------------------------------------------------------
   function renderStageTabs(container, players, currentStage, onSelect) {
     container.innerHTML = "";
     const stages = [];
@@ -133,9 +104,6 @@
     });
   }
 
-  // ---------------------------------------------------------
-  // Filters panel (Position — generated from data)
-  // ---------------------------------------------------------
   function renderFilters(container, players, state, onChange) {
     container.innerHTML = "";
     const F = window.APP_FILTERS;
@@ -149,9 +117,6 @@
     container.appendChild(posSel);
   }
 
-  // ---------------------------------------------------------
-  // Card grid
-  // ---------------------------------------------------------
   function renderCard(p, traitLabels, onClick, index) {
     const group = positionGroup(p.position);
     const card = el("div", "card" + (group ? " card--" + group : ""));
@@ -159,8 +124,6 @@
     const metaParts = [p.height, cardYear(p)].filter((v) => !U.isBlank(v));
     const traits = p._keyTraits.slice(0, 3);
 
-    // Full position text, never abbreviated — abbreviating "Wing" to "WIN"
-    // read as a clipped/garbled word rather than a real position.
     const photoHTML = !U.isBlank(p.photo_url)
       ? '<img src="' + U.esc(p.photo_url) + '" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=&quot;card-photo-fallback&quot;>' + U.esc(initials(p.display_name)) + '</div>\'">'
       : '<div class="card-photo-fallback">' + U.esc(initials(p.display_name)) + "</div>";
@@ -179,8 +142,6 @@
         "</div>" +
       "</div>";
 
-    // Stagger the entrance very slightly for the first row or two only —
-    // capped so a long list never feels like it's making you wait.
     card.style.animationDelay = (Math.min(index || 0, 9) * 35) + "ms";
 
     const imgEl = card.querySelector(".card-photo img");
@@ -207,9 +168,6 @@
     players.forEach((p, i) => container.appendChild(renderCard(p, traitLabels, onCardClick, i)));
   }
 
-  // ---------------------------------------------------------
-  // Profile
-  // ---------------------------------------------------------
   function kvGrid(items) {
     if (!items.length) return "";
     return '<div class="kv-grid">' + items.map((i) =>
@@ -225,9 +183,6 @@
     return '<div class="tag-list">' + vals.map((v) => '<div class="tag-item">' + U.esc(v) + "</div>").join("") + "</div>";
   }
 
-  // Biometric/vitals grid — lives directly beside the photo in the hero
-  // now, so it's the one place this data appears (it used to also repeat
-  // across a row of badge pills further up), removing that duplication.
   function bioGrid(p) {
     const items = [];
     if (p._age !== null && p._age !== undefined) items.push(["Age", p._age]);
@@ -248,8 +203,6 @@
     return sectionWrap("Key Skills", '<div class="card-traits profile-traits">' + p._keyTraits.map((t, i) => traitChip(t, traitLabels, p["trait_" + (i + 1)])).join("") + "</div>");
   }
 
-  // The quote + prose summary, grouped and titled together as the read/
-  // analysis block — sits right after the hero, before skills and film.
   function takeSection(p) {
     let html = "";
     if (!U.isBlank(p.scouting_snapshot)) html += '<div class="profile-quote">' + U.esc(p.scouting_snapshot) + "</div>";
@@ -319,14 +272,9 @@
             (!U.isBlank(p.archetype) ? '<div class="profile-kicker">' + U.esc(p.archetype) + "</div>" : "") +
             '<div class="profile-name">' + U.esc(p.display_name) + "</div>" +
             (teamLine ? '<div class="profile-team">' + U.esc(teamLine) + "</div>" : "") +
-            // All biometric/vitals data lives here now, right beside the
-            // photo — it used to also repeat in a row of badges above the
-            // Overview section further down; that duplication is gone.
             bioGrid(p) +
           "</div>" +
         "</div>" +
-        // Read/analysis first, then skills, then film — matches how a
-        // scout actually consumes a profile: verdict, then evidence, then tape.
         takeSection(p) +
         traitsSection(p, traitLabels) +
         filmSection(p) +
@@ -344,7 +292,6 @@
     window.requestAnimationFrame(() => container.classList.add("is-open"));
     $("#profile-back-btn", container).addEventListener("click", onBack);
     $("#profile-close-btn", container).addEventListener("click", onBack);
-    // Clicking the dimmed backdrop (outside the card) closes it too.
     container.onclick = (e) => { if (e.target === container) onBack(); };
   }
 
