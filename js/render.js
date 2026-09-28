@@ -41,10 +41,15 @@
     passing: "images/players/passingskill.png",
     finishing: "images/players/finskill.png",
     "shot creation": "images/players/shotcreationskill.png",
+    creation: "images/players/shotcreationskill.png",
     "decision making": "images/players/decisionmakingskill.png",
     "poa defense": "images/players/poadefenseskill.png",
     switchability: "images/players/switchskill.png",
     "rim protection": "images/players/rimproskill.png",
+    // "rim_pressure" shows up in the sheet on one row — looks like a typo
+    // for rim_protection, so it's aliased to the same icon rather than
+    // falling back to a bare letter chip. Worth a sheet cleanup pass.
+    "rim pressure": "images/players/rimproskill.png",
     rebounding: "images/players/rebskill.png",
     transition: "images/players/transkill.png",
     motor: "images/players/motorskill.png",
@@ -52,6 +57,14 @@
     athleticism: "images/players/athskill.png",
     potential: "images/players/potskill.png",
   };
+
+  // key_strengths cells mix underscore_case ("poa_defense") and plain
+  // words ("creation") depending on how each row was typed. Normalize to
+  // the map's lowercase-space form so lookups don't silently miss and
+  // fall back to a letter monogram.
+  function normalizeTraitKey(key) {
+    return String(key || "").trim().toLowerCase().replace(/_/g, " ");
+  }
 
   // A per-player trait_1..trait_4 cell only counts as an icon once it's an
   // actual image URL — while those cells still hold plain descriptive text
@@ -68,8 +81,9 @@
   // The tile stays icon-first, but the trait name now prints again as a
   // small caption underneath — the tooltip/alt text still carry it too.
   function traitChip(key, traitLabels, perPlayerIconUrl) {
-    const label = traitLabels[key] || key.replace(/_/g, " ");
-    const iconSrc = looksLikeImageUrl(perPlayerIconUrl) ? perPlayerIconUrl : TRAIT_ICON_MAP[key];
+    const normKey = normalizeTraitKey(key);
+    const label = traitLabels[normKey] || traitLabels[key] || normKey;
+    const iconSrc = looksLikeImageUrl(perPlayerIconUrl) ? perPlayerIconUrl : TRAIT_ICON_MAP[normKey];
     const badge = iconSrc
       ? '<img class="trait-icon" src="' + U.esc(iconSrc) + '" alt="' + U.esc(label) + '" loading="lazy">'
       : '<span class="trait-mono">' + U.esc(U.monogram(key)) + "</span>";
